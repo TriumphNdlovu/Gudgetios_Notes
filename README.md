@@ -1,1 +1,0 @@
-# Gudgetios_Notes
