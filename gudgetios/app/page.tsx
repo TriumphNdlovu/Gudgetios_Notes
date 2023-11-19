@@ -2,27 +2,32 @@
 import { Card, Button } from '@nextui-org/react';
 import LeftTab from './components/leftTab';
 import MenuComponent from './components/MenuComponent';
+import TodoList from './Todolist/page';
 
 export default function Index() {
-  const defaultContent =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+  const todos = [
+    { content: 'Todo 1', completed: false },
+    { content: 'Todo 2', completed: false },
+    { content: 'Todo 3', completed: false },
+  ];
 
   return (
     <div className="flex flex-col justify-between min-h-screen">
+
       <div className="sticky top-0 z-50">
         <MenuComponent />
       </div>
 
-      <div className="flex">
+      {/* Todo:Will deal with this later */}
+      {/* <div className="flex items-center">
         <div className="w-1/4 max-w-xs">
-          <LeftTab />
+            <LeftTab />
         </div>
-      </div>
+      </div> */}
 
       <div className="flex-1 max-w-3xl mx-auto">
-          // add a bunch of cards on the page
+          <TodoList todos = {todos}/>
           
-            
       </div>
       <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
         <p>
