@@ -1,10 +1,13 @@
-// 'use client'
+'use client'
 import React from "react";
 import {Accordion, AccordionItem} from "@nextui-org/react";
 
-export default function App() {
+export default function LeftTab() {
   const defaultContent =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+    "Lorem ipsum dolor sit amet," + 
+    "consectetur adipiscing elit, sed do eiusmod tempor" +
+    "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam," +
+    "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 
   return (
     <Accordion variant="splitted">
@@ -18,5 +21,6 @@ export default function App() {
         {defaultContent}
       </AccordionItem>
     </Accordion>
+    // <p>Left Tab</p>
   );
 }
