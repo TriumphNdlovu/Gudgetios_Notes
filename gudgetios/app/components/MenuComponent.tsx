@@ -31,17 +31,17 @@ export default function MenuComponent() {
         </NavbarBrand>
         <NavbarItem>
           <Link color="foreground" href="#">
-            Features
+            Todos
           </Link>
         </NavbarItem>
         <NavbarItem isActive>
-          <Link href="#" aria-current="page" color="warning">
-            Customers
+          <Link href="#" aria-current="page">
+            Nodes
           </Link>
         </NavbarItem>
         <NavbarItem>
           <Link color="foreground" href="#">
-            Integrations
+            About
           </Link>
         </NavbarItem>
       </NavbarContent>

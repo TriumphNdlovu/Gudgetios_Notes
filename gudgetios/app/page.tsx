@@ -3,8 +3,11 @@ import { Card, Button } from '@nextui-org/react';
 import LeftTab from './components/leftTab';
 import MenuComponent from './components/MenuComponent';
 import TodoList from './Todolist/page';
+import Header from './components/Header';
+
 
 export default function Index() {
+
   const todos = [
     { content: 'Todo 1', completed: false },
     { content: 'Todo 2', completed: false },
@@ -18,6 +21,9 @@ export default function Index() {
         <MenuComponent />
       </div>
 
+      <div>
+        <Header/>
+      </div>
       {/* Todo:Will deal with this later */}
       {/* <div className="flex items-center">
         <div className="w-1/4 max-w-xs">
@@ -26,7 +32,7 @@ export default function Index() {
       </div> */}
 
       <div className="flex-1 max-w-3xl mx-auto">
-          <TodoList todos = {todos}/>
+          <TodoList/>
           
       </div>
       <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
