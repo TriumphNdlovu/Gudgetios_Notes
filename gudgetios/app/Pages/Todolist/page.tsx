@@ -1,6 +1,6 @@
 
 'use client'
-import { CheckboxGroup, Checkbox, Button, Input, Divider } from "@nextui-org/react";
+import { CheckboxGroup, Checkbox, Button, Input, Divider, Card } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 import { Todo } from '../../interfaces/TodoList';
 import { 
@@ -10,16 +10,32 @@ import {
         toggleTodoService 
 
       } from '../../services/TodoService';
+import { Container } from "postcss";
+
 
 export default function TodoList() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  
+  useEffect(() => {
+    getTodosService()
+      .then(initialTodos => {
+        const todosWithCorrectCompleted = initialTodos.map(todo => ({
+          ...todo,
+          completed: Boolean(todo.completed),
+        }));
+        setTodos(todosWithCorrectCompleted);
+      })
+      .finally(() => setLoading(false)); // Update loading state when done
+  }, []);
 
   
     
-  useEffect(() => {
-    getTodosService().then(setTodos);
-  }, []);
+  // useEffect(() => {
+  //   getTodosService().then(setTodos);
+  // }, []);
     
 
 
@@ -36,26 +52,18 @@ export default function TodoList() {
   };
   
   const handleToggleTodo = (completed: boolean , uniqueId:string) => {
-    
-    const todoIndex = todos.findIndex(todo => todo.uniqueId === uniqueId);
-    if (todoIndex === -1) return;
-
-    const updatedTodos = [...todos];
-    updatedTodos[todoIndex].completed = completed;
-
-    setTodos(updatedTodos);
-
     toggleTodoService(!completed , uniqueId).then(() => {
-    getTodosService().then(setTodos);
+      getTodosService().then(setTodos);
     });
-
   };
 
-  
+  if (loading) {
+    return <p>Loading...</p>; // Render a loading indicator while fetching data
+  }
    
 
   return (
-    <div>
+    <div className="w-30 min-h-80% max-h-90%">
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <Input
           value={newTodo}
@@ -74,13 +82,20 @@ export default function TodoList() {
       >
         {todos.map((todo, index) => (
           <div key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Checkbox 
-              value={todo.uniqueId} 
-              checked={todo.completed} 
-              onChange={() => handleToggleTodo(!todo.completed, todo.uniqueId )}
+            {/* <Checkbox 
+              value={index.toString()} 
+              checked={true} 
+              onChange={() => handleToggleTodo(todo.completed, todo.uniqueId)}
             >
-                {todo.content}
-            </Checkbox>
+              {todo.content}
+            </Checkbox> */}
+            <input 
+              type="checkbox" 
+              checked={todo.completed} 
+              onChange={() => handleToggleTodo(todo.completed, todo.uniqueId)}
+            />
+            {todo.content}
+
 
             <Button onClick={() => handleRemoveTodo(todo.uniqueId )}>Delete</Button>
           </div>
