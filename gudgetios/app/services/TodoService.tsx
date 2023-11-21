@@ -1,27 +1,30 @@
-// todoService.ts
+'use client';
+import { getCurrentUserId, removeTodo } from '../repository/TodoCrud';
 import { Todo } from '../interfaces/TodoList';
+import { createClient } from '@/utils/supabase/server';
+import {
+          getTodos,
+          addTodo,
+          toggleTodo
+        } from '../repository/TodoCrud';
 
-// This is a mock database. Replace it with your actual database.
-let todos: Todo[] = [
-  { content: 'First todo', completed: false },
-  { content: 'Second todo', completed: false },
-];
-
-export const getTodos = (): Promise<Todo[]> => {
-  return Promise.resolve(todos);
+export const getTodosService = async (): Promise<Todo[]> => {
+  return getTodos();
 };
 
-export const addTodo = (content: string): Promise<void> => {
-  todos.push({ content, completed: false });
-  return Promise.resolve();
+export const addTodoService = async (content: string): Promise<void> => {
+
+  addTodo(content);
+
 };
 
-export const removeTodo = (index: number): Promise<void> => {
-  todos = todos.filter((_, todoIndex) => todoIndex !== index);
-  return Promise.resolve();
+export const removeTodoService = async (uniqueId:string): Promise<void> => {
+  removeTodo(uniqueId);
 };
 
-export const toggleTodo = (index: number): Promise<void> => {
-  todos = todos.map((todo, todoIndex) => todoIndex === index ? { ...todo, completed: !todo.completed } : todo);
-  return Promise.resolve();
+export const toggleTodoService = async (completed: boolean , uniqueId:string): Promise<void> => {
+
+  toggleTodo(completed , uniqueId);
+ 
 };
+

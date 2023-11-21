@@ -2,7 +2,7 @@
 import { Card, Button } from '@nextui-org/react';
 import LeftTab from './components/leftTab';
 import MenuComponent from './components/MenuComponent';
-import TodoList from './Todolist/page';
+import TodoList from './Pages/Todolist/page';
 import Header from './components/Header';
 
 
