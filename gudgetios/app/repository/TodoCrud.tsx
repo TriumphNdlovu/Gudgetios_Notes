@@ -24,15 +24,14 @@ export const getTodos = async (): Promise<Todo[]> => {
   return data || [];
 };
 
-export const addTodo = async (content: string, ): Promise<void> => {
+export const addTodo = async (content: string, due: Date ): Promise<void> => {
 
   const user_id = (await getCurrentUserId()).toString();
   const supabase = createClient(cookies());
   const uniqueId = uuidv4();
-
   const { error } = await supabase
     .from('todos')
-    .insert([{ content, completed: false, user_id, uniqueId }]);
+    .insert([{ content, completed: false, user_id, uniqueId,due }]);
 
   if (error) throw error;
 };

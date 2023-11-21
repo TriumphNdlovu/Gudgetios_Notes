@@ -1,7 +1,7 @@
 
 'use client'
-import { CheckboxGroup, Checkbox, Button, Input, Divider, Card } from "@nextui-org/react";
-import React, { useState, useEffect } from "react";
+import { CheckboxGroup, Checkbox, Button, Input, Divider, Card, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue } from "@nextui-org/react";
+import React, { useState, useEffect, } from "react";
 import { Todo } from '../../interfaces/TodoList';
 import { 
         getTodosService,
@@ -10,15 +10,16 @@ import {
         toggleTodoService 
 
       } from '../../services/TodoService';
-import { Container } from "postcss";
 
 
 export default function TodoList() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
+  const [dueDate, setDueDate] = useState('');
   const [loading, setLoading] = useState(true);
 
-  
+  const columns = ["Status", "Content","Due", "Action"];
+
   useEffect(() => {
     getTodosService()
       .then(initialTodos => {
@@ -27,28 +28,29 @@ export default function TodoList() {
           completed: Boolean(todo.completed),
         }));
         setTodos(todosWithCorrectCompleted);
+    
       })
       .finally(() => setLoading(false)); // Update loading state when done
   }, []);
 
-  
-    
-  // useEffect(() => {
-  //   getTodosService().then(setTodos);
-  // }, []);
-    
-
-
   const handleAddTodo = () => {
-    
-    addTodoService(newTodo).then(() => getTodosService()).then(setTodos);
+  
+    addTodoService(newTodo,dueDate).then(() => {
+      getTodosService().then(setTodos);
       setNewTodo('');
-    
+      setDueDate('');
+    });
   };
 
   const handleRemoveTodo = (uniqueId:string) => {
 
-    removeTodoService(uniqueId).then(() => getTodosService()).then(setTodos);
+    setLoading(true);
+    removeTodoService(uniqueId).then(() => getTodosService()).then(setTodos)
+    .finally(() => setLoading(false));
+
+    if (loading) {
+      return <p>Loading...</p>; 
+    }
   };
   
   const handleToggleTodo = (completed: boolean , uniqueId:string) => {
@@ -58,49 +60,62 @@ export default function TodoList() {
   };
 
   if (loading) {
-    return <p>Loading...</p>; // Render a loading indicator while fetching data
+    return <p>Loading...</p>;
   }
    
 
   return (
-    <div className="w-30 min-h-80% max-h-90%">
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <Input
-          value={newTodo}
-          onChange={(e) => setNewTodo(e.target.value)}
-          placeholder="Enter Todo here"
-          style={{ marginRight: '10px' }}
-        />
-        <Button onClick={handleAddTodo}> + </Button>
-      </div>
-
-      <Divider />
-
-      <CheckboxGroup
-        description="Check off what you have done"
-        label="Select todos"
-      >
-        {todos.map((todo, index) => (
-          <div key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
-            {/* <Checkbox 
-              value={index.toString()} 
-              checked={true} 
-              onChange={() => handleToggleTodo(todo.completed, todo.uniqueId)}
-            >
-              {todo.content}
-            </Checkbox> */}
-            <input 
-              type="checkbox" 
-              checked={todo.completed} 
-              onChange={() => handleToggleTodo(todo.completed, todo.uniqueId)}
+   <div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Input
+            value={newTodo}
+            onChange={(e) => setNewTodo(e.target.value)}
+            placeholder="Enter Todo here"
+            style={{ marginRight: '10px' }} 
             />
-            {todo.content}
+          <Input
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+            style={{ marginRight: '10px' }}
+          />
+          <Button onClick={handleAddTodo}> + </Button>
+        </div>
 
+        <Divider />
 
-            <Button onClick={() => handleRemoveTodo(todo.uniqueId )}>Delete</Button>
-          </div>
-        ))}
-      </CheckboxGroup>
-    </div>
+        <Table>
+          <TableHeader>
+
+            <TableColumn key={0}>{columns[0]}</TableColumn>
+            <TableColumn key={1}>{columns[1]}</TableColumn>
+            <TableColumn key={2}>{columns[2]}</TableColumn>
+            <TableColumn key={2}>{columns[3]}</TableColumn>
+
+          </TableHeader>
+
+          <TableBody>
+            {todos.map((row) => (
+              <TableRow key={row.uniqueId}
+              >
+                <TableCell key={0}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                {<input
+                  type="checkbox"
+                  checked={row.completed}
+                  onChange={() => handleToggleTodo(row.completed, row.uniqueId)} />}</TableCell>
+                <TableCell key={1}>{row.content}</TableCell>
+                <TableCell key={2}>{(row.due).toString()}</TableCell>
+                <TableCell key={3}>{<Button onClick={() => handleRemoveTodo(row.uniqueId)}>Delete</Button>}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+
+      </div>
   );
 }

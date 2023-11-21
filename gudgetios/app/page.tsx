@@ -8,11 +8,6 @@ import Header from './components/Header';
 
 export default function Index() {
 
-  const todos = [
-    { content: 'Todo 1', completed: false },
-    { content: 'Todo 2', completed: false },
-    { content: 'Todo 3', completed: false },
-  ];
 
   return (
     <div className="flex flex-col justify-between min-h-screen">
@@ -24,14 +19,9 @@ export default function Index() {
       <div>
         <Header/>
       </div>
-      {/* Todo:Will deal with this later */}
-      {/* <div className="flex items-center">
-        <div className="w-1/4 max-w-xs">
-            <LeftTab />
-        </div>
-      </div> */}
+   
 
-      <div className="flex-1 max-w-3xl mx-auto">
+      <div className="flex-col mx-auto">
           <TodoList/>
           
       </div>

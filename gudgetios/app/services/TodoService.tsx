@@ -12,9 +12,9 @@ export const getTodosService = async (): Promise<Todo[]> => {
   return getTodos();
 };
 
-export const addTodoService = async (content: string): Promise<void> => {
+export const addTodoService = async (content: string,dueDate: Date): Promise<void> => {
 
-  addTodo(content);
+  addTodo(content,dueDate);
 
 };
 
