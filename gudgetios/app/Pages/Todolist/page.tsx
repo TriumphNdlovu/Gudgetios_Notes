@@ -2,7 +2,7 @@
 'use client'
 import { CheckboxGroup, Checkbox, Button, Input, Divider,
    Card, Table, TableBody, TableCell, TableColumn, 
-   TableHeader, TableRow, getKeyValue, Tabs,Tab, Select, SelectItem } from "@nextui-org/react";
+   TableHeader, TableRow, getKeyValue, Tabs,Tab, Select, SelectItem, Textarea } from "@nextui-org/react";
 import React, { useState, useEffect, } from "react";
 import { Todo } from '../../interfaces/TodoList';
 import { 
@@ -12,6 +12,11 @@ import {
         toggleTodoService 
 
       } from '../../services/TodoService';
+import { 
+  FaEdit, FaTrash, FaPlus,FaCheck 
+
+} from 'react-icons/fa';
+
 
 export default function TodoList() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -74,49 +79,65 @@ export default function TodoList() {
    
 
   return (
-   <div>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <Input
-            value={newTodo}
-            onChange={(e) => setNewTodo(e.target.value)}
-            placeholder="Enter Todo here"
-            style={{ marginRight: '10px' }} 
-            />
+    <div className="flex flex-col items-center justify-center px-4 sm:px-0">
+      <div className="w-full max-w-full">
+        <Textarea
+          label="Add Todo"
+          variant="bordered"
+          placeholder="enter todo here..."
+          disableAnimation
+          disableAutosize
+          onChange={(e) => setNewTodo(e.target.value)}
+          className="mb-2 w-full"
+          classNames={{
+            input: "resize-y min-h-[40px]",
+          }}
+        />
+        
+        <div>
+
           <Input
             type="date"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
-            style={{ marginRight: '10px' }}
+            className="mb-2 w-full"
           />
-          <Button onClick={handleAddTodo}> + </Button>
+
+          <Divider orientation="vertical" />
+
+          <Button onClick={handleAddTodo} className="mb-2 w-full">
+            <FaCheck />
+          </Button>
+
         </div>
-
-        <Divider />
-
+        
+  
         <Select
-              items={filtertitle}
-              label="Filter"
-              placeholder="Filter Tasks"
-              className="max-w-xs"
-              onChange={(event) => setFilter(event.target.value)}
-            >
-              {filtertitle.map((item) => <SelectItem key={item}>
-                {item}
-                </SelectItem>)}
+          items={filtertitle}
+          label="Filter"
+          placeholder="Filter Tasks"
+          className="mb-2 w-full"
+          onChange={(event) => setFilter(event.target.value)}
+        >
+          {filtertitle.map((item) => (
+            <SelectItem key={item} value={item}>
+              {item}
+            </SelectItem>
+          ))}
+
         </Select>
-        <Table>
-               <TableHeader>
 
-                          <TableColumn key={0}>{columns[0]}</TableColumn>
-                          <TableColumn key={1}>{columns[1]}</TableColumn>
-                          <TableColumn key={2}>{columns[2]}</TableColumn>
-                          <TableColumn key={2}>{columns[3]}</TableColumn>
+        <Divider className="mb-2" />
 
-                        </TableHeader>
+        <Table className="mb-2 w-full">
+          <TableHeader>
+            <TableColumn key={0} className="w-1/6">{columns[0]}</TableColumn>
+            <TableColumn key={1} className="w-3/6">{columns[1]}</TableColumn>
+            <TableColumn key={2} className="w-1/6">{columns[2]}</TableColumn>
+            <TableColumn key={3} className="w-1/6">{columns[3]}</TableColumn>
+          </TableHeader>
 
                         <TableBody>
-
-
                           {todos
                           .filter(todo => {
                             if (filter === 'Active') return !todo.completed;
@@ -132,41 +153,43 @@ export default function TodoList() {
                             }}
                             >
                               <TableCell key={0}
-                                style={{
-                                  display: 'flex',
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                  borderRadius: '10px',
-                                }}>
-                              {<input
+                                className="flex justify-center items-center rounded-lg"
+                              >
+                              {
+                                <input
                                 type="checkbox"
                                 checked={row.completed}
                                 onChange={() => handleToggleTodo(row.completed, row.uniqueId)} 
-                                style={{ 
-                                  width: '35px', 
-                                  height: '35px', 
-                                  border: '1px solid #000', 
-                                  borderRadius: '10px' 
-                                }}
-                            
-                                />}
+                                className="w-4 h-4 sm:w-6 sm:h-6"
+                              />
+                              }
                                 
                                 </TableCell>
                               <TableCell key={1}
                                 style={{
-                                  backgroundColor: row.completed ? '#transparent' : '#040015',
+                                  backgroundColor: row.completed ? '#transparent' : '#0D1317',
                                   borderRadius: '10px',
                                 }}>
                                 {row.content}
                               {row.content}</TableCell>
                               <TableCell key={2}>{(row.due).toString()}</TableCell>
-                              <TableCell key={3}>{<Button onClick={() => handleRemoveTodo(row.uniqueId)}>Delete</Button>}</TableCell>
+                              <TableCell key={3}>
+                                {
+                                  <Button onClick={() => handleRemoveTodo(row.uniqueId)}>
+                                    <FaTrash/>
+                                  </Button>
+                                }
+                                {
+                                  <Button>
+                                    <FaEdit/>                              
+                                  </Button>
+                                }
+                              </TableCell>
                             </TableRow>
                           ))}
-                        </TableBody>
-                      </Table>
-
-        
+          </TableBody>
+        </Table>           
+        </div>
       </div>
   );
 }
