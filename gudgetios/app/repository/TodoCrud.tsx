@@ -24,7 +24,7 @@ export const getTodos = async (): Promise<Todo[]> => {
   return data || [];
 };
 
-export const addTodo = async (content: string, due: Date ): Promise<void> => {
+export const addTodo = async (content: string, due: String ): Promise<void> => {
 
   const user_id = (await getCurrentUserId()).toString();
   const supabase = createClient(cookies());
