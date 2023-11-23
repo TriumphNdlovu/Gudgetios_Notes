@@ -60,3 +60,15 @@ export const toggleTodo = async (completed: boolean , uniqueId:string) => {
 
   if (error) throw error;
 };
+
+export const editTodo = async (content: string , due: string , uniqueId:string) => {
+  
+    const user_id = (await getCurrentUserId()).toString();
+    const supabase = createClient(cookies());
+    const { error } = await supabase
+    .from('todos')
+    .update({ content , due })
+    .eq('uniqueId', uniqueId);  
+
+    if (error) throw error;
+};

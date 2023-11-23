@@ -18,6 +18,9 @@ import {
   Select,
   SelectItem,
   Textarea,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 import { Todo } from "../../interfaces/TodoList";
@@ -26,6 +29,7 @@ import {
   addTodoService,
   removeTodoService,
   toggleTodoService,
+  editTodoService,
 } from "../../services/TodoService";
 import { FaEdit, FaTrash, FaPlus, FaCheck } from "react-icons/fa";
 
@@ -35,6 +39,8 @@ export default function TodoList() {
   const [dueDate, setDueDate] = useState("");
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("Active");
+  const [editTodo, setEditTodo] = useState('');
+  const [editDate, setEditDate] = useState('');
   const columns = ["Status", "Content", "Due", "Action"];
   const filtertitle = ["Active", "Completed", "Overdue"];
 
@@ -58,6 +64,9 @@ export default function TodoList() {
     });
   };
 
+
+  
+
   const handleRemoveTodo = (uniqueId: string) => {
     setLoading(true);
     removeTodoService(uniqueId)
@@ -80,6 +89,16 @@ export default function TodoList() {
     toggleTodoService(!completed, uniqueId).then(() => {
       getTodosService().then(setTodos);
     });
+  };
+
+  const handleEditTodo = (id: string) => {
+    
+    editTodoService(editTodo, editDate, id).then(() => {
+      getTodosService().then(setTodos);
+    });
+  
+    setEditTodo('');
+    setEditDate('');
   };
 
   if (loading) {
@@ -197,11 +216,42 @@ export default function TodoList() {
                     <Button onClick={() => handleRemoveTodo(row.uniqueId)}>
                       <FaTrash />
                     </Button>
-
-                    <Button >
-                      <FaEdit />
-                    </Button>
-
+                    <Popover placement="bottom" showArrow offset={10}>
+                    <PopoverTrigger>
+                        <Button 
+                          color="primary" 
+                          onClick={() => {
+                            setEditTodo(row.content);
+                            setEditDate(row.due.toString());
+                          }}
+                        >
+                          <FaEdit />
+                        </Button>
+                      </PopoverTrigger>
+                    <PopoverContent className="w-[240px]">
+                    {(titleProps) => (
+                      <div className="px-1 py-2 w-full">
+                        <p className="text-small font-bold text-foreground" {...titleProps}>
+                          Edit Todo
+                        </p>
+                        <div className="mt-2 flex flex-col gap-2 w-full">
+                          <Input
+                            value={editTodo}
+                            onChange={(e) => setEditTodo(e.target.value)}
+                            placeholder="Enter new todo here"
+                          />
+                          <Input
+                            type="date"
+                            value={editDate}
+                            onChange={(e) => setEditDate(e.target.value)}
+                          />
+                          <Button onClick={() => handleEditTodo(row.uniqueId)}>Save</Button>
+                        </div>
+                      </div>
+                    )}
+                  </PopoverContent>
+                  </Popover>
+  
                   </TableCell>
                 </TableRow>
               ))}
