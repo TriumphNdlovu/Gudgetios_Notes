@@ -14,7 +14,7 @@ export default function Index() {
         <Header />
       </div>
 
-      <div className=" w-full">
+      <div className=" w-full p-unit-xl">
         <TodoList />
       </div>
 
