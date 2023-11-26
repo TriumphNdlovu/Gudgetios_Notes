@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <div className="flex flex-col gap-5 items-center">
        <div>
-       <img
+       <img 
         src='../Assets/testing.jpg'
         alt="Gudgetios"
         width={100}
