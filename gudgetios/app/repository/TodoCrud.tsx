@@ -3,7 +3,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { Todo } from '../interfaces/TodoList';
-import { v4 as uuidv4 } from 'uuid';
 
 export const getCurrentUserId = async (): Promise<string> => {
   const cookieStore = cookies();
@@ -11,6 +10,10 @@ export const getCurrentUserId = async (): Promise<string> => {
   const user = await supabase.auth.getUser();
   return user?.data?.user?.id?.toString() || '';
 };
+
+function generateUniqueId() {
+  return Date.now().toString(36) + Math.random().toString(36).substring(2);
+}
 
 export const getTodos = async (): Promise<Todo[]> => { 
   const userId = (await getCurrentUserId()).toString();
@@ -28,7 +31,7 @@ export const addTodo = async (content: string, due: String ): Promise<void> => {
 
   const user_id = (await getCurrentUserId()).toString();
   const supabase = createClient(cookies());
-  const uniqueId = uuidv4();
+  const uniqueId = generateUniqueId();
   const { error } = await supabase
     .from('todos')
     .insert([{ content, completed: false, user_id, uniqueId,due }]);
