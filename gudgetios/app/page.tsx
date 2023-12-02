@@ -1,6 +1,6 @@
 import MenuComponent from './components/MenuComponent';
 import TodoList from './Pages/Todolist/page';
-import Header from './components/Header';
+// import Header from './components/Header';
 
 export default function Index() {
   return (
@@ -10,12 +10,14 @@ export default function Index() {
         <MenuComponent />
       </div>
 
-      <div>
-        <Header />
-      </div>
+       {/* <div>
+         <Header />
+       </div> */}
 
-      <div className=" w-full p-unit-xl">
-        <TodoList />
+      <div className="flex flex-col w-full p-unit-xl">
+        <div className="flex flex-col">
+          <TodoList />
+        </div>
       </div>
 
       <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
