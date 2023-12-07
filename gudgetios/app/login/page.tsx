@@ -53,6 +53,7 @@ export default function Login({
   }
 
   return (
+    <div style={{ width: '100vw', height: '100vh' }}>
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
       <Link
         href="/"
@@ -75,8 +76,9 @@ export default function Login({
         Back
       </Link>
 
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <form
-        className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
+        className="animate-in flex flex-col w-full justify-center gap-2 text-foreground"
         action={signIn}
       >
         <label className="text-md" htmlFor="email">
@@ -113,6 +115,8 @@ export default function Login({
           </p>
         )}
       </form>
+    </div>
+    </div>
     </div>
   )
 }
