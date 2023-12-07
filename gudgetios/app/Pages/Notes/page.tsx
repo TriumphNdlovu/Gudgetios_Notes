@@ -1,4 +1,5 @@
 import MenuComponent from '@/app/components/MenuComponent';
+import AddNoteComponent from '@/app/components/addNoteComponent';
 import { Note } from '@/app/interfaces/Notes';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/react';
 import React from 'react';
@@ -42,9 +43,10 @@ export default function TodoList(){
         ))
       }
     </div>
-    <div className='flex flex-col items-center space-y-4'>
+    {/* <div className='flex flex-col items-center space-y-4'>
       <button className='border hover:border-cyan-600 padding border-spacing-2 w-full max-w-2xl min-w-[20rem] justify-center'>Add Note</button>
-    </div>
+    </div> */}
+    <AddNoteComponent/>
     
     <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
     <p>
