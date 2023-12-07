@@ -1,5 +1,7 @@
 'use client';
 import React, { useState } from 'react';
+import { addNoteService } from '../services/NoteService';
+import { Note } from '../interfaces/Notes';
 
 
 
@@ -18,10 +20,24 @@ export default function AddNoteComponent() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
-    function handleSubmit()
-    {
-        
+    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+      event.preventDefault();
+
+      const note: Note = {
+        id : 0,
+        title,
+        content,
+        date: '2021-10-10',
+      };
+
+      addNoteService(note);
+
+      setTitle('');
+      setContent('');
+
+      closeModal();
     }
+    
 
 return (
     <div className='flex flex-col items-center space-y-4'>
@@ -45,7 +61,7 @@ return (
                     </div>
               
               <div className='bg-black px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse'>
-                <button onClick={closeModal} type='submit' className='mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm'>Add</button>
+                <button  type='submit' className='mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm'>Add</button>
                 <button onClick={closeModal} type='button' className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm'>Cancel</button>
               </div>
               </form>

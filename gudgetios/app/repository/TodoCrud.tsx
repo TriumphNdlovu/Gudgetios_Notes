@@ -11,7 +11,8 @@ export const getCurrentUserId = async (): Promise<string> => {
   return user?.data?.user?.id?.toString() || '';
 };
 
-function generateUniqueId() {
+export const generateUniqueId = async() =>
+{
   return Date.now().toString(36) + Math.random().toString(36).substring(2);
 }
 

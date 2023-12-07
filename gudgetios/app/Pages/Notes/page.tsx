@@ -2,9 +2,16 @@ import MenuComponent from '@/app/components/MenuComponent';
 import AddNoteComponent from '@/app/components/addNoteComponent';
 import { Note } from '@/app/interfaces/Notes';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/react';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { getNotesService } from '@/app/services/NoteService';
 
 export default function TodoList(){
+
+
+  useEffect(() => {
+    getNotesService();
+  }, []);
+
 
   const Notes: Note[] = 
   [
