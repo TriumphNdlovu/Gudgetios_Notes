@@ -1,5 +1,14 @@
 import React from "react";
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, NavbarMenu, NavbarMenuItem, NavbarMenuToggle} from "@nextui-org/react";
+import Link from 'next/link';
+import 
+{
+  Navbar, NavbarBrand, 
+  NavbarContent, NavbarItem, 
+   Button, NavbarMenu, 
+  NavbarMenuItem, NavbarMenuToggle
+} 
+from "@nextui-org/react";
+
 import AuthButton from './AuthButton';
 import HomeButton from "./HomeButton";
 
@@ -14,38 +23,26 @@ export default function MenuComponent() {
 
   return (
     <Navbar disableAnimation isBordered>
-      <NavbarContent className="sm:hidden" justify="start">
-        <NavbarMenuToggle />
-      </NavbarContent>
-
-      <NavbarContent className="sm:hidden pr-3" justify="center">
-        <NavbarBrand>
-          {/* <AcmeLogo /> */}
-          <p className="font-bold text-inherit">Menu</p>
-        </NavbarBrand>
-      </NavbarContent>
-
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarBrand>
-          <HomeButton/>
-        </NavbarBrand>
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Todos
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#" aria-current="page">
-            Nodes
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            About
-          </Link>
-        </NavbarItem>
-      </NavbarContent>
-
+  <NavbarBrand>
+    <HomeButton/>
+  </NavbarBrand>
+  <NavbarItem isActive>
+  <Link href="#">
+    Home
+  </Link>
+  </NavbarItem>
+  <NavbarItem>
+  <Link href="../Pages/Notes">
+    Notes
+  </Link>
+  </NavbarItem>
+  <NavbarItem>
+  <Link href="../Pages/Settings">
+    Settings
+  </Link>
+  </NavbarItem>
+</NavbarContent>
       <NavbarContent justify="end">
         <div>
             <AuthButton/>
@@ -61,7 +58,6 @@ export default function MenuComponent() {
                 index === 2 ? "warning" : index === menuItems.length - 1 ? "danger" : "foreground"
               }
               href="#"
-              size="lg"
             >
               {item}
             </Link>
