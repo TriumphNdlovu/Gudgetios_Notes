@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { addNoteService } from '../services/NoteService';
 import { Note } from '../interfaces/Notes';
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link, Textarea} from "@nextui-org/react";
-import { FaTruckMonster } from 'react-icons/fa';
+import { FaPlusCircle, FaTruckMonster } from 'react-icons/fa';
 
 export default function AddNoteComponent() {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
@@ -30,7 +30,9 @@ export default function AddNoteComponent() {
 
   return (
     <>
-      <Button onPress={onOpen} color="primary">Open Modal</Button>
+      <Button onPress={onOpen} color="default" className='flex max-w-[10px] fixed bottom-4 right-4'>
+  <FaPlusCircle className=' text-xl'/>
+</Button>
       <Modal 
         isOpen={isOpen} 
         onOpenChange={onOpenChange}

@@ -1,24 +1,20 @@
-import { createGlobalStyle } from 'styled-components';
+
 import type { AppProps } from 'next/app';
+import Head from 'next/head';
+import { metadata } from '../components/metadata';
+import TopNavbar from '../components/TopNavbar';
 
-const GlobalStyle = createGlobalStyle
-`
-body {
-  background-color: red; // This should turn the background color of the body to red
-}
-
-  @media (max-width: 768px) {
-    * {
-      transform: scale(0.4);
-      font-size: 5000px;
-    }
-  }
-`;
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <GlobalStyle />
+      <Head>
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+        <link rel="canonical" href={metadata.metadataBase.toString()} />
+      </Head>
+      <TopNavbar />
+      sadfadfuihsadioufhiudoshfidopsfhidsopfhadsiophfadsiouh
       <Component {...pageProps} />
     </>
   );

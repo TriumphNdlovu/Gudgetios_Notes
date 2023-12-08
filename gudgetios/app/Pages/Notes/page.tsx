@@ -21,6 +21,12 @@ import { FiEdit } from "react-icons/fi";
 import React, { useEffect, useState } from 'react';
 import { getNotesService, deleteNoteService } from '@/app/services/NoteService';
 import { MdDeleteForever } from "react-icons/md";
+import LeftTab from '@/app/components/leftTab';
+import MenuComponent from '@/app/components/MenuComponent';
+import TopNavbar from '@/app/components/TopNavbar';
+import { LayoutGroup } from 'framer-motion';
+import Layout from '@/app/layout';
+import RootLayout from '@/app/layout';
 export default function Notes() {
 
   const [Notes, setNotes] = React.useState<Note[]>([]);
@@ -51,11 +57,36 @@ export default function Notes() {
     throw new Error('Function not implemented.');
   }
 
+  function convertDate(Sdate: string): string {
+    const date = new Date(Sdate);
+    const options: Intl.DateTimeFormatOptions = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    };
+    const formattedDate = `${date.toLocaleDateString(undefined, options)}`;
+    return formattedDate;
+    }
+
   return (
 
-    <div className='flex flex-col justify-between min-h-screen w-ful'>
-      {/* <MenuComponent/> */}
-      <div className='text-center text-2xl font-bold'>Notes</div>
+
+<RootLayout>
+    <div className='flex flex-col justify-between min-h-screen w-ful text-xl'>
+      
+
+      <div>
+        <TopNavbar/>
+        <LeftTab/>
+      </div>
+      <div className='text-center text-2xl font-bold'>
+        Notes
+      </div>
+
+
+
       <div className='flex flex-col items-center space-y-4'>
         {
           Notes.map((note) => (
@@ -92,14 +123,14 @@ export default function Notes() {
                     <Input
                       autoFocus
                       label="Title"
-                      value={title}
+                      value={note.title}
                       onChange={(e) => setTitle(e.target.value)}
                       placeholder="Enter your title"
                       variant="bordered"
                     />
                     <Textarea
                       label="Content"
-                      value={content}
+                      value={note.content}
                       onChange={(e) => setContent(e.target.value)}
                       placeholder="Enter your content"
                       variant="bordered"
@@ -116,35 +147,36 @@ export default function Notes() {
 
 
               <CardBody>
-                <button onClick={onOpenEdit} className='text-white hover:text-blue-500 absolute flex flex-col buttom-4 left-2'>
-                  <FiEdit />
-                </button>
-
-                <button onClick={onOpen} className='text-white hover:text-red-800  absolute flex flex-col top-2 right-2'>
+              
+                <button onClick={onOpen} className='text-white hover:text-red-800  absolute flex flex-col top-3 right-2 py-2'>
                   <MdDeleteForever />
                 </button>
-
-                <div className='flex justify-between items-center'>
-                  <CardHeader className='text-xl text-foreground-800'>{note.title}</CardHeader>
+                <div className='text-xl text-foreground-800 py-2'>
+                  {note.title}
                 </div>
-                <p className=' hover:translate-x-2'>{note.content}</p>
-                <CardFooter className='text-end text-xs'>Created: {(note.created_at)}</CardFooter>
+              
+                <p className=' font-thin'>{note.content}</p>
+                <CardFooter className='flex justify-end text-end text-xs text-gray-400' >
+                  Created: {convertDate(note.created_at)}
+                  <button onClick={onOpenEdit} className='text-white hover:text-blue-500 padding px-1'>
+                    <FiEdit />
+                  </button>
+                </CardFooter>
               </CardBody>
             </Card>
           ))
         }
       </div>
-
-
       <div>
-
       </div>
 
-      <AddNoteComponent
+      <div className='flex justify-end'>
+        <AddNoteComponent />
+      </div>
 
-      />
 
-      <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
+
+      <footer className="w-full border-t border-t-foreground/10 p-8 space-y-8 flex justify-center text-center text-xs">
         <p>
           Powered by{' '}
           <a
@@ -158,6 +190,7 @@ export default function Notes() {
         </p>
       </footer>
     </div>
+    </RootLayout>
   )
 };
 
