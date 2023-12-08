@@ -2,7 +2,9 @@ export interface Note {
     id: number;
     title: string;
     content: string;
-    date: string;
+    created_at: string;
+    uniqueId: string;
+
     // time: string;
     // color: string;
     // isArchived: boolean;

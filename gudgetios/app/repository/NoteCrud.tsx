@@ -30,4 +30,16 @@ export const getNotes = async (): Promise<Note[]> => {
     return data || [];
   };
 
+export const deleteNote = async (uniqueId: string): Promise<void> => {
+
+    const supabase = createClient(cookies());
+
+    const { error } = await supabase
+      .from('notes')
+      .delete()
+      .eq('uniqueId', uniqueId);
+
+    if (error) throw error;
+  };
+
 

@@ -1,59 +1,104 @@
-import MenuComponent from '@/app/components/MenuComponent';
+'use client';
+// import MenuComponent from '@/app/components/MenuComponent';
 import AddNoteComponent from '@/app/components/addNoteComponent';
 import { Note } from '@/app/interfaces/Notes';
-import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/react';
+import { 
+  Card, CardBody, 
+  CardFooter, CardHeader,
+  Modal, 
+  ModalContent, 
+  ModalHeader, 
+  ModalBody, 
+  ModalFooter,
+  useDisclosure,
+  Button,
+  button
+
+} from '@nextui-org/react';
+import { FiEdit } from "react-icons/fi";
 import React, { useEffect } from 'react';
-import { getNotesService } from '@/app/services/NoteService';
+import { getNotesService,deleteNoteService } from '@/app/services/NoteService';
+import { MdDeleteForever } from "react-icons/md";
+export default function Notes(){
+  const [Notes, setNotes] = React.useState<Note[]>([]);
+  const [updated, setUpdated] = React.useState<boolean>(false);
 
-export default function TodoList(){
-
-
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
   useEffect(() => {
-    getNotesService();
-  }, []);
+   getNotesService().then((initialNotes) => {
+    setNotes(initialNotes);
+   })
+  }, [AddNoteComponent,updated]);
 
 
-  const Notes: Note[] = 
-  [
-    {id: 1,
-    title: 'Note 1',
-    content: 'Make beautiful websites regardless of your design experience',
-    date: '2021-10-10',
-    },
-    {id: 2,
-    title: 'Note 2',
-    content: 'Make beautiful websites regardless of your design experienceMake beautiful websites regardless of your design experience',
-    date: '2021-10-10',
-    },
-    {id: 3,
-    title: 'Note 3',
-    content: 'Make beautiful websites',
-    date: '2021-10-10',
-    },
-  ]
+  function handleDelete(uniqueId: string): void {
+    // setNotes(Notes.filter((note) => note.uniqueId !== uniqueId));
+    deleteNoteService(uniqueId);
+    setUpdated
+    onOpenChange();
+  }
 
   return (
     
     <div className='flex flex-col justify-between min-h-screen w-ful'>
-      <MenuComponent/>
+      {/* <MenuComponent/> */}
     <div className='text-center text-2xl font-bold'>Notes</div>
     <div className='flex flex-col items-center space-y-4'>
       {
         Notes.map((note) => (
-          <Card className='border hover:border-cyan-600 padding border-spacing-2 w-full max-w-2xl min-w-[20rem] justify-center'>
+          <Card key={note.uniqueId} className='border hover:border-cyan-600 border-spacing-2 w-full max-w-2xl min-w-[20rem] justify-center relative'>
+              <button onClick={()=>{}} className='text-white hover:text-blue-500 flex flex-col top-2 right-2'>
+              <FiEdit />
+              </button>
+              <button onClick={onOpen} className='text-white hover:text-red-800  flex flex-col top-2 right-2'>
+              <MdDeleteForever />
+              </button>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Delete Note</ModalHeader>
+              <ModalBody>
+                <p> 
+                  Are you sure you want to delete this note?
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button color="danger" onPress={()=>{handleDelete(note.uniqueId)}}>
+                  Delete
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+            
+            
+            
+            
             <CardBody>
-              <CardHeader className='text-xl text-foreground-800'>{note.title}</CardHeader>
+              <div className='flex justify-between items-center'>
+                <CardHeader className='text-xl text-foreground-800'>{note.title}</CardHeader>
+              </div>
               <p className=' hover:translate-x-2'>{note.content}</p>
-              <CardFooter className='text-end text-xs'>Created: {note.date}</CardFooter>
+              <CardFooter className='text-end text-xs'>Created: {(note.created_at)}</CardFooter>
             </CardBody>
           </Card>
         ))
       }
     </div>
-    {/* <div className='flex flex-col items-center space-y-4'>
-      <button className='border hover:border-cyan-600 padding border-spacing-2 w-full max-w-2xl min-w-[20rem] justify-center'>Add Note</button>
-    </div> */}
-    <AddNoteComponent/>
+   
+
+   <div>
+
+   </div>
+
+    <AddNoteComponent
+
+    />
     
     <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
     <p>
@@ -71,3 +116,5 @@ export default function TodoList(){
   </div>
   )
 };
+
+
