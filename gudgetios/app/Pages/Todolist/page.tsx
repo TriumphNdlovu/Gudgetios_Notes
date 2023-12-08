@@ -32,6 +32,7 @@ import {
   editTodoService,
 } from "../../services/TodoService";
 import { FaEdit, FaTrash, FaPlus, FaCheck } from "react-icons/fa";
+import MenuComponent from "@/app/components/MenuComponent";
 
 export default function TodoList() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -107,7 +108,9 @@ export default function TodoList() {
 
   
   return (
+    <div>
     <div className="flex flex-col items-center justify-center px-4 ">
+      
       <div className="w-full max-w-full">
 
       <div className="flex">
@@ -260,6 +263,7 @@ export default function TodoList() {
         </Table>
         </div>
       </div>
+    </div>
     </div>
   );
 }
