@@ -45,7 +45,7 @@ export default function MenuComponent() {
 </NavbarContent>
       <NavbarContent justify="end">
         <div>
-            <AuthButton/>
+            {/* <AuthButton/> */}
         </div>
       </NavbarContent>
 

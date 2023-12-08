@@ -12,7 +12,6 @@ import {
   ModalFooter,
   useDisclosure,
   Button,
-  button,
   Input,
   Textarea
 
@@ -20,13 +19,9 @@ import {
 import { FiEdit } from "react-icons/fi";
 import React, { useEffect, useState } from 'react';
 import { getNotesService, deleteNoteService } from '@/app/services/NoteService';
-import { MdDeleteForever } from "react-icons/md";
-import LeftTab from '@/app/components/leftTab';
-import MenuComponent from '@/app/components/MenuComponent';
-import TopNavbar from '@/app/components/TopNavbar';
-import { LayoutGroup } from 'framer-motion';
-import Layout from '@/app/layout';
-import RootLayout from '@/app/layout';
+
+import { TfiClose } from "react-icons/tfi";
+
 export default function Notes() {
 
   const [Notes, setNotes] = React.useState<Note[]>([]);
@@ -72,15 +67,8 @@ export default function Notes() {
 
   return (
 
-
-<RootLayout>
     <div className='flex flex-col justify-between min-h-screen w-ful text-xl'>
       
-
-      <div>
-        <TopNavbar/>
-        <LeftTab/>
-      </div>
       <div className='text-center text-2xl font-bold'>
         Notes
       </div>
@@ -149,7 +137,7 @@ export default function Notes() {
               <CardBody>
               
                 <button onClick={onOpen} className='text-white hover:text-red-800  absolute flex flex-col top-3 right-2 py-2'>
-                  <MdDeleteForever />
+                  <TfiClose />
                 </button>
                 <div className='text-xl text-foreground-800 py-2'>
                   {note.title}
@@ -190,7 +178,6 @@ export default function Notes() {
         </p>
       </footer>
     </div>
-    </RootLayout>
   )
 };
 

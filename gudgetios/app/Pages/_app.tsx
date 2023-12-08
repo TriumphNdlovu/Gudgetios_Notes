@@ -13,8 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="description" content={metadata.description} />
         <link rel="canonical" href={metadata.metadataBase.toString()} />
       </Head>
-      <TopNavbar />
-      sadfadfuihsadioufhiudoshfidopsfhidsopfhadsiophfadsiouh
+      {/* <TopNavbar /> */}
       <Component {...pageProps} />
     </>
   );

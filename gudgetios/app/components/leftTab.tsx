@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import AuthButton from './AuthButton';
+import { FaArrowRight } from 'react-icons/fa';
 
 export default function LeftTab() {
   const [isOpen, setIsOpen] = useState(true);
@@ -41,9 +43,18 @@ export default function LeftTab() {
             </ul>
             <button onClick={() => setIsOpen(false)}>Close</button>
           </div>
+          {/* <AuthButton/> */}
         </div>
       )}
-      {!isOpen && <button onClick={() => setIsOpen(true)} className="fixed left-0 top-0 z-50">Open</button>}
+      {
+        !isOpen && 
+        <button 
+          onClick={() => setIsOpen(true)} 
+          className="fixed left-0 top-1/2 transform -translate-y-1/2 z-50"
+        >
+          <FaArrowRight/>
+        </button>
+      }
     </>
   )
 }

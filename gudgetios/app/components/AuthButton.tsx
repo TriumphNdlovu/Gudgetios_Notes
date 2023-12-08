@@ -1,3 +1,4 @@
+
 import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
 import { cookies } from 'next/headers'
@@ -12,8 +13,7 @@ export default async function AuthButton() {
   } = await supabase.auth.getUser()
 
   const signOut = async () => {
-    'use server'
-
+  
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
     await supabase.auth.signOut()
