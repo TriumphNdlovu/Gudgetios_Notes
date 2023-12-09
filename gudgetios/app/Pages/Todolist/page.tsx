@@ -109,7 +109,7 @@ export default function TodoList() {
   
   return (
     <div>
-    <div className="flex flex-col items-center justify-center px-4 ">
+    <div className="flex flex-col items-center h-screen justify-center px-4 ">
       
       <div className="w-full max-w-full">
 

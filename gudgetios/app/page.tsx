@@ -6,9 +6,9 @@ export default function Index() {
   return (
     <div className="flex flex-col justify-between min-h-screen w-full ">
 
-      <div className="sticky top-0 z-50">
+      {/* <div className="sticky top-0 z-50">
         <MenuComponent />
-      </div>
+      </div> */}
 
        {/* <div>
          <Header />
@@ -16,7 +16,10 @@ export default function Index() {
 
       <div className="flex flex-col w-full p-unit-xl">
         <div className="flex flex-col">
-          <TodoList />
+          {/* <TodoList /> */}
+
+          I will have to be creative and make cards for each page and then link them to the menu component
+          and just make it look colorful and nice with images
         </div>
       </div>
 
