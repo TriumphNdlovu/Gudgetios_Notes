@@ -5,7 +5,7 @@ import { FaArrowRight, FaGithubSquare, FaLinkedinIn, FaMailchimp } from 'react-i
 import { RxCross1 } from "react-icons/rx";
 import { Button, Card, CardBody, CardFooter, CardHeader, Divider, button } from '@nextui-org/react';
 import { MdOutlineArrowForwardIos } from "react-icons/md";
-import { RiTodoLine, RiStickyNoteLine, RiSettings3Line, RiCalendarLine } from 'react-icons/ri';
+import { RiTodoLine, RiStickyNoteLine, RiSettings3Line, RiCalendarLine, RiProfileFill, RiProfileLine, RiAccountBoxLine } from 'react-icons/ri';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation'
 
@@ -37,6 +37,7 @@ export default function LeftTab() {
             <div className='flex justify-start'>
               Menu
             </div>
+
             <button onClick={() => setIsOpen(false)}
               className='absolute top-1 right-0 mt-2 mr-2 hover:-rotate-12'>
               <RxCross1 />
@@ -45,6 +46,15 @@ export default function LeftTab() {
 
           <CardBody>
             <div className="flex flex-col items-start space-y-3">
+
+            <Link href="../Pages/Profile">
+                <p className={`flex items-center text-lg hover:text-orange-500 ${usePathname() === '/Pages/Profile' ? 'text-blue-500' : ''}`}>
+                  <RiAccountBoxLine className="mr-2" /> Profile
+                </p>
+              </Link>
+
+              <Divider />
+
               <Link href="../Pages/Todolist">
                 <p className={`flex items-center text-lg hover:text-blue-500 ${usePathname() === '/Pages/Todolist' ? 'text-blue-500' : ''}`}>
                   <RiTodoLine className="mr-2" /> Todo List

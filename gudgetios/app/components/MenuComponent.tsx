@@ -27,20 +27,8 @@ export default function MenuComponent() {
   <NavbarBrand>
     <HomeButton/>
   </NavbarBrand>
-  <NavbarItem isActive>
-  <Link href="#">
-    Home
-  </Link>
-  </NavbarItem>
   <NavbarItem>
-  <Link href="../Pages/Notes">
-    Notes
-  </Link>
-  </NavbarItem>
-  <NavbarItem>
-  <Link href="../Pages/Settings">
-    Settings
-  </Link>
+  
   </NavbarItem>
 </NavbarContent>
       <NavbarContent justify="end">
