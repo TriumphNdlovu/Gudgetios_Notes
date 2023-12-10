@@ -13,15 +13,15 @@ const Profile = () => {
 
   async function Science() {
     
-    return await checkuser();
+    checkuser().then((cake) => {
+      if(cake == false)
+        router.push('/login');
+    });
   }
 
   useEffect(() => {
     
-   
-    if (!Science()) {
-      router.push('/login');
-    }
+  Science();
 
   }, []);
 
