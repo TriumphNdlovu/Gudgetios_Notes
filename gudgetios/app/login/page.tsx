@@ -34,6 +34,7 @@ export default function Login({
     const origin = headers().get('origin')
     const email = formData.get('email') as string
     const password = formData.get('password') as string
+    const displayname = email.split('@')[0];
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
 

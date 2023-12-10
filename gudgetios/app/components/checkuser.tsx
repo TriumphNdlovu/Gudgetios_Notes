@@ -26,3 +26,16 @@ export async function signOut() {
     return redirect('/login')
 }
 
+export async function getProfileDetails() {
+    const cookieStore = cookies()
+    const supabase = createClient(cookieStore)
+
+    const {
+        data: { user },
+    } = await supabase.auth.getUser()
+    const username = user?.user_metadata?.username
+    const email = user?.email
+    
+    return {username,email}
+}
+

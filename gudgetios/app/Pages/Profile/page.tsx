@@ -3,12 +3,14 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
-import {checkuser,signOut} from '../../components/checkuser'
+import {checkuser,signOut,getProfileDetails} from '../../components/checkuser'
 import { Avatar, Button, Card, CardFooter, Input } from '@nextui-org/react';
 
 const Profile = () => {
 
     const router = useRouter();
+    let Username = 'jane.doe';
+    let Email = 'jane@doe.com';
 
 
   async function Science() {
@@ -16,6 +18,13 @@ const Profile = () => {
     checkuser().then((cake) => {
       if(cake == false)
         router.push('/login');
+    });
+    getProfileDetails().then((user) => {
+        Username = user.username;
+        Email = user.email!;
+        console.log(Username);
+        console.log(Email);
+        
     });
   }
 
@@ -37,10 +46,12 @@ const Profile = () => {
             </div>
         </Card>
                 <div>
-                    <Input type="text" variant='bordered' label="Username" disabled value={'@24Louche_'} className='py-1'/>
-                    <Input type="text" variant='bordered' label="Name" disabled value={'Triumph'} className='py-1'/>
-                    <Input type="text" variant='bordered' label="Surname" disabled value={'Ndlovu'} className='py-1'/>
-                    <Input type="email" variant='bordered' label="Email" disabled value={'realtriumphndlovu@gmail.com'} className='py-1'/>
+                    <Input type="text" variant='bordered' 
+                    label="Username" disabled 
+                    value={Username} className='py-1'/>
+                    <Input type="email" variant='bordered' 
+                    label="Email" disabled 
+                    value={Email} className='py-1'/>
                 </div>
         <CardFooter>
             <div className='flex justify-right'>
