@@ -21,6 +21,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Spinner,
 } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 import { Todo } from "../../interfaces/TodoList";
@@ -103,7 +104,15 @@ export default function TodoList() {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+
+    return (
+      <div className="h-screen w-screen flex items-center justify-center">
+        
+        <Spinner/>
+        
+      </div>
+    
+    );
   }
 
   
