@@ -77,7 +77,11 @@ export default function Login({
         Back
       </Link>
 <div>
-  Welcome to Gudgetios ;|
+  <div>
+    <p>
+      Welcome to Gudgetios ;|
+    </p>
+  </div>
   </div>
       <div>
       <form

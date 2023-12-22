@@ -3,8 +3,9 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
-import {checkuser,signOut,getProfileDetails} from '../../components/checkuser'
+import {checkuser,signOut} from '../../components/checkuser'
 import { Avatar, Button, Card, CardFooter, Input } from '@nextui-org/react';
+import { getProfileService } from '@/app/services/ProfileService';
 
 const Profile = () => {
 
@@ -19,8 +20,9 @@ const Profile = () => {
       if(cake == false)
         router.push('/login');
     });
-    getProfileDetails().then((user) => {
-        Username = user.username;
+
+    getProfileService().then((user) => {
+        Username = user.Username;
         Email = user.email!;
         console.log(Username);
         console.log(Email);
@@ -31,12 +33,13 @@ const Profile = () => {
   useEffect(() => {
     
   Science();
+  
 
   }, []);
 
   return (
-    <div className='h-screen flex flex-col justify-center'>
-      <Card className='border border-cyan-500 max-w-2xl items-center'>
+    <div className='h-screen flex flex-col items-center justify-center'>
+      <Card className='border border-cyan-500  items-center'>
         <h1 className=' text-2xl'>Profile</h1>
         <Card>
             <div className='flex items-center flex-col justify-between'>
