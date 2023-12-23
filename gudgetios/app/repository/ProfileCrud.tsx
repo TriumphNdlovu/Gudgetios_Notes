@@ -20,5 +20,8 @@ export const getProfileDetails = async (): Promise<any> => {
     .eq('uniqueId', userId);
 
   if (error) throw error;
+
+  console.table("The User " + data![0]);
+
   return data![0];
 }

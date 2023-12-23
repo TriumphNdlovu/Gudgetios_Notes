@@ -1,5 +1,5 @@
 'use client'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
@@ -10,8 +10,9 @@ import { getProfileService } from '@/app/services/ProfileService';
 const Profile = () => {
 
     const router = useRouter();
-    let Username = 'jane.doe';
-    let Email = 'jane@doe.com';
+    const [Username, setUsername] = useState('');
+    const [Firstname, setFirstname] = useState('');
+    const [Lastname, setLastname] = useState('');
 
 
   async function Science() {
@@ -21,13 +22,27 @@ const Profile = () => {
         router.push('/login');
     });
 
-    getProfileService().then((user) => {
-        Username = user.Username;
-        Email = user.email!;
-        console.log(Username);
-        console.log(Email);
-        
-    });
+    try
+    {
+      getProfileService().then((user) => {
+        if (user) {
+          setUsername(user.Username);
+          setFirstname(user.firstname!);
+          setLastname(user.lastname!);
+
+          console.log(Username);
+          console.log(Firstname);
+          console.log(Lastname);
+        } else {
+          console.log('User is undefined');
+        }
+          
+      });
+
+    }catch(e)
+    {
+      console.log(e);
+    }
   }
 
   useEffect(() => {
@@ -35,7 +50,7 @@ const Profile = () => {
   Science();
   
 
-  }, []);
+  }, [Science]);
 
   return (
     <div className='h-screen flex flex-col items-center justify-center'>
@@ -52,9 +67,12 @@ const Profile = () => {
                     <Input type="text" variant='bordered' 
                     label="Username" disabled 
                     value={Username} className='py-1'/>
-                    <Input type="email" variant='bordered' 
-                    label="Email" disabled 
-                    value={Email} className='py-1'/>
+                    <Input type="text" variant='bordered' 
+                    label="Firstname" disabled 
+                    value={Firstname} className='py-1'/>
+                    <Input type="text" variant='bordered' 
+                    label="Lastname" disabled 
+                    value={Lastname} className='py-1'/>
                 </div>
         <CardFooter>
             <div className='flex justify-right'>
