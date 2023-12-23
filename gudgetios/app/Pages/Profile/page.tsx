@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
-import {checkuser,signOut} from '../../components/checkuser'
+import {checkuser,signOut,EditProfile} from '../../components/checkuser'
 import { Avatar, Button, Card, CardFooter, Input } from '@nextui-org/react';
 import { getProfileService } from '@/app/services/ProfileService';
 
@@ -54,7 +54,7 @@ const Profile = () => {
 
   return (
     <div className='h-screen flex flex-col items-center justify-center'>
-      <Card className='border border-cyan-500  items-center'>
+      <Card className='border border-cyan-500 items-center w-1/2'>
         <h1 className=' text-2xl'>Profile</h1>
         <Card>
             <div className='flex items-center flex-col justify-between'>
@@ -63,7 +63,7 @@ const Profile = () => {
                 />
             </div>
         </Card>
-                <div>
+                <div className=' w-4/5'>
                     <Input type="text" variant='bordered' 
                     label="Username" disabled 
                     value={Username} className='py-1'/>
@@ -79,6 +79,12 @@ const Profile = () => {
                 <button className=' hover:bg-red-600  y-2 px-4 rounded' 
                 onClick={()=>signOut()}>
                     SignOut
+                </button>
+            </div>
+            <div className='flex justify-left'>
+                <button className=' hover:bg-blue-600  y-2 px-4 rounded' 
+                onClick={()=>EditProfile()}>
+                    EditProfile
                 </button>
             </div>
         </CardFooter>

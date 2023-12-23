@@ -26,6 +26,11 @@ export async function signOut() {
     return redirect('/login')
 }
 
+export async function EditProfile() {
+
+    console.log('Edit Profile');
+}
+
 export async function getProfileDetails() {
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)

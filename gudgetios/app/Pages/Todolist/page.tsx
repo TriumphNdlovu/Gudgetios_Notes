@@ -120,7 +120,7 @@ export default function TodoList() {
     <div>
     <div className="flex flex-col items-center min-h-screen justify-center px-4 ">
       
-      <div className="w-full max-w-full">
+      <div className="w-4/5">
 
       <div className="flex">
       <Textarea

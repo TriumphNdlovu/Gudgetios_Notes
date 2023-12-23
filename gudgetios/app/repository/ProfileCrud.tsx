@@ -21,7 +21,6 @@ export const getProfileDetails = async (): Promise<any> => {
 
   if (error) throw error;
 
-  console.table("The User " + data![0]);
-
   return data![0];
 }
+
