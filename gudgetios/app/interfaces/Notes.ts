@@ -4,23 +4,4 @@ export interface Note {
     content: string;
     created_at: string;
     uniqueId: string;
-
-    // time: string;
-    // color: string;
-    // isArchived: boolean;
-    // isDeleted: boolean;
-    // isPinned: boolean;
-    // isEdited: boolean;
-    // isReminder: boolean;
-    // reminderDate: string;
-    // reminderTime: string;
-    // reminderRepeat: string;
-    // reminderRepeatNo: number;
-    // reminderRepeatType: string;
-    // reminderActive: boolean;
-    // createdDate: string;
-    // modifiedDate: string;
-    // userId: number;
-    // label: string;
-    // image: string;
 }

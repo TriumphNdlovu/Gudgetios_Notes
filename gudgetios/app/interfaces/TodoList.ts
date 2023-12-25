@@ -4,3 +4,10 @@ export interface Todo {
     due: Date;
     completed: boolean;
 }
+
+export interface UPDATES {
+    Active     : number;
+    Completed  : number;
+    Overdue    : number;
+    Total      : number;
+}
