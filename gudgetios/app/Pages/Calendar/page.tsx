@@ -5,12 +5,13 @@ import interactionPlugin from "@fullcalendar/interaction"
 import React from 'react';
 import { Todo } from '@/app/interfaces/TodoList';
 import { getTodos } from '@/app/repository/TodoCrud';
-import { modal, popover } from '@nextui-org/react';
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, modal, popover, useDisclosure } from '@nextui-org/react';
 
 const Calendar: React.FC = () => {
 
   const [events, setEvents] = React.useState<Todo[]>([]);
-
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const [content, setContent] = React.useState<string>("");
   React.useEffect(() => {
     const getEvents = async () => {
       
@@ -36,8 +37,13 @@ const Calendar: React.FC = () => {
     );
   }
 
-  const handleEventClick = (clickInfo:any) => {
-    alert(`You clicked on event: ${clickInfo.event.title}`);
+  onclose = () => {
+    console.log("it's closed");
+  }
+
+  function handleEventClick(info:any) {
+    setContent(info);
+    onOpen();
   }
 
   return (
@@ -56,8 +62,34 @@ const Calendar: React.FC = () => {
           })
         }
         eventContent={renderEventContent}
-        eventClick={handleEventClick} // Add this line
+        eventClick={((data) => handleEventClick(data.event.title))} 
       />
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+              <ModalBody>
+                <b> 
+                  Your Event
+                </b>
+                <p>
+                  {content}
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button color="success" onPress={onClose}>
+                  Complete
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      
     </div>
   );
 };
