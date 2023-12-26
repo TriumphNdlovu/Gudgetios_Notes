@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, SetStateAction, Dispatch } from 'react';
 import Link from 'next/link';
 import AuthButton from './AuthButton';
 import { FaArrowRight, FaGithubSquare, FaLinkedinIn, FaMailchimp } from 'react-icons/fa';
@@ -8,9 +8,13 @@ import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { RiTodoLine, RiStickyNoteLine, RiSettings3Line, RiCalendarLine, RiProfileFill, RiProfileLine, RiAccountBoxLine } from 'react-icons/ri';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation'
+type LeftTabProps = {
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+};
 
-export default function LeftTab() {
-  const [isOpen, setIsOpen] = useState(true);
+const LeftTab: React.FC<LeftTabProps> = ({ setIsOpen }) => {
+  
+  const [isOpen, setIsOpenLocal] = useState(true);
   const router = useRouter();
   useEffect(() => {
     const handleResize = () => {
@@ -27,8 +31,18 @@ export default function LeftTab() {
 
 
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [setIsOpen]);
 
+  
+
+  // const LeftTab: React.FC<LeftTabProps> = ({ setIsOpen }) => {
+  //   return (
+  //     <div>
+  //       <button onClick={() => setIsOpen(true)}>Open</button>
+  //       <button onClick={() => setIsOpen(false)}>Close</button>
+  //     </div>
+  //   );
+  // };
   return (
     <>
       {isOpen && (
@@ -38,7 +52,7 @@ export default function LeftTab() {
               Menu
             </div>
 
-            <button onClick={() => setIsOpen(false)}
+            <button onClick={() => {setIsOpen(false); setIsOpenLocal(false)}}
               className='absolute top-1 right-0 mt-2 mr-2 hover:-rotate-12'>
               <RxCross1 />
             </button>
@@ -134,7 +148,7 @@ export default function LeftTab() {
       {
         !isOpen &&
         <button
-          onClick={() => setIsOpen(true)}
+          onClick={() => {setIsOpen(true); setIsOpenLocal(true)}}
           className="fixed left-0 top-1/2 transform -translate-y-1/2 z-50 text-2xl
           hover:text-[50px]
           "
@@ -145,3 +159,4 @@ export default function LeftTab() {
     </>
   )
 }
+export default LeftTab;

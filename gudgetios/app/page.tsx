@@ -118,8 +118,12 @@ export default function Index() {
                 
                  ) : (
                     <div>
-                      <text className='text-sm'>Active Notes : {notesCount}</text>
-                      <br></br>
+                      <div className='flex flex-row pt-2'>
+                            <FaCircle className=' text-green-600 '/>
+                              <text className='text-sm flex px-3'>
+                                <div className=''> Active Notes : {notesCount}</div>
+                              </text>
+                          </div>
                     </div>
                   )
                 }
@@ -172,7 +176,7 @@ export default function Index() {
             className="font-bold hover:underline"
             rel="noreferrer"
           >
-            Gudgetios
+            Triumph Ndlovu @Gudgetios
           </a>
         </p>
       </footer>
