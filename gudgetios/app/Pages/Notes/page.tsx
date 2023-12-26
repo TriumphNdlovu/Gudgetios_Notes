@@ -87,7 +87,7 @@ export default function Notes() {
 
   return (
 
-    <div className='flex flex-col justify-between min-h-screen w-ful text-xl'>
+    <div className=' w-ful text-xl'>
       
       <div className='text-center text-2xl font-bold'>
         Notes
@@ -99,7 +99,7 @@ export default function Notes() {
         {
           Notes.map((note) => (
 
-            <Card key={note.uniqueId} className='border hover:border-cyan-600 border-spacing-2 w-full max-w-2xl min-w-[20rem] justify-center relative'>
+            <Card key={note.uniqueId} className='border hover:border-cyan-600 border-spacing-2 w-3/5 min-w-[20rem] justify-center relative'>
 
               <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>

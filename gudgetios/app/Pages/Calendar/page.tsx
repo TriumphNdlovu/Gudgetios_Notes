@@ -5,19 +5,22 @@ import interactionPlugin from "@fullcalendar/interaction"
 import React from 'react';
 import { Todo } from '@/app/interfaces/TodoList';
 import { getTodos } from '@/app/repository/TodoCrud';
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, modal, popover, useDisclosure } from '@nextui-org/react';
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner, modal, popover, useDisclosure } from '@nextui-org/react';
 
 const Calendar: React.FC = () => {
 
   const [events, setEvents] = React.useState<Todo[]>([]);
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [content, setContent] = React.useState<string>("");
+  const [loading, setLoading] = React.useState(true);
   React.useEffect(() => {
     const getEvents = async () => {
       
       getTodos().then((data) => {
         console.log(data);
         setEvents(data);
+      }).then(() => {
+        setLoading(false);
       });
     }
     getEvents();
@@ -40,6 +43,9 @@ const Calendar: React.FC = () => {
   onclose = () => {
     console.log("it's closed");
   }
+  function onComplete() {
+    console.log("it's completed");
+  }
 
   function handleEventClick(info:any) {
     setContent(info);
@@ -48,6 +54,7 @@ const Calendar: React.FC = () => {
 
   return (
     <div className='w-4/5 h-full'>
+      {loading && <div><Spinner/>Filling Calendar...</div>}
       <FullCalendar
         contentHeight='auto'
         plugins={[dayGridPlugin, interactionPlugin]}
@@ -68,11 +75,8 @@ const Calendar: React.FC = () => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">Your Task</ModalHeader>
               <ModalBody>
-                <b> 
-                  Your Event
-                </b>
                 <p>
                   {content}
                 </p>
@@ -81,7 +85,7 @@ const Calendar: React.FC = () => {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="success" onPress={onClose}>
+                <Button color="success" onPress={onClose} onClick={()=>{onComplete()}}>
                   Complete
                 </Button>
               </ModalFooter>

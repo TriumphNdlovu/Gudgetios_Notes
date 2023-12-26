@@ -20,7 +20,7 @@ export default function RootLayout({
   
   return (
     <html lang="en" className='dark'>
-      <body className="">
+      <body className="flex flex-col justify-between min-h-screen">
           <MenuComponent/>
         <div className={`transition-all duration-200 ${isOpen ? 'w-64' : 'w-16'}`}>
           <LeftTab setIsOpen={setIsOpen}/>
@@ -30,7 +30,9 @@ export default function RootLayout({
             {children}
           </Providers>
         </div>
+        <div className=''>
           <Myfooter/>
+        </div>
       </body>
     </html>
   )

@@ -7,7 +7,8 @@ import React from 'react';
 import { getUpdatesService } from './services/TodoService';
 import { getNotes } from './repository/NoteCrud';
 import { getNotesService, getUpdateService } from './services/NoteService';
-import { FaCalendarMinus, FaCheck, FaCircle, FaClock, FaCross } from 'react-icons/fa';
+import { FaCalendarDay, FaCalendarMinus, FaCalendarWeek, FaCheck, FaCircle, FaClock, FaCross, FaHeartBroken } from 'react-icons/fa';
+import { Router } from 'next/router';
 // import Header from './components/Header';
 
 export default function Index() {
@@ -49,18 +50,15 @@ export default function Index() {
     }
 
   return (
-    <div className="flex flex-col justify-between min-h-screen w-full ">
+    <div className="flex flex-col justify-between w-full ">
       <div className="flex flex-col w-full p-unit-xl">
         <div className="grid grid-cols-2 gap-4">
-          <Card  className=' border hover:border-blue-500'>
+          <Card  className=' border hover:border-blue-500  bg-no-repeat bg-cover bg-center' >
             <CardHeader className='text-2xl'>Todo List</CardHeader>
-              <Link href="/page1" className='px-5 py-5 border-r-5'>
-                <div className='grid grid-cols-2 gap-2'>
-                    <div className="card">
-                      <img src="https://picsum.photos/200" className='rounded border-r-10' alt="Image 1" />
-                    </div>
-                    <div>
-                    <text className='text-2xl flex flex-col justify-centre'>Summary</text>
+              <Link href="./Pages/Todolist" className='px-5 py-5 border-r-5 bg-opacity-90'>
+                <div className='flex flex-col text-center'>
+                    <div className=''>
+                    <text className='text-2xl flex flex-col justify-centre text-center'>Summary</text>
                     <Divider />
                     {loading ? (
                         
@@ -69,7 +67,7 @@ export default function Index() {
                           </React.Fragment>
                     
                     ) : (
-                        <div>
+                        <div className='flex flex-col text-center justify-center items-center'>
                           <div className='flex flex-row pt-2'>
                             <FaCircle className=' text-green-600 '/>
                               <text className='text-sm flex px-3'>
@@ -104,13 +102,10 @@ export default function Index() {
             </Link>
           </Card>
 
-          <Card className='border hover:border-blue-500'>
+          <Card className='border  hover:border-blue-500  bg-no-repeat bg-cover bg-center'>
             <CardHeader className='text-2xl'>Notes</CardHeader>
-              <Link href="/page1" className='px-5 py-5 border-r-5'>
-                <div className='grid grid-cols-2 gap-2'>
-                  <div className="card">
-                    <img src="https://picsum.photos/200" className='rounded border-r-10' alt="Image 1" />
-                  </div>
+              <Link href="./Pages/Notes" className='px-5 py-5 border-r-5'>
+                <div className='flex flex-col text-center'>
                   <div>
                     <text className='text-2xl flex flex-col justify-centre'>Summary</text>
                     <Divider />
@@ -120,13 +115,55 @@ export default function Index() {
                       </React.Fragment>
                 
                  ) : (
-                    <div>
+                  <div className='flex flex-col text-center justify-center items-center'>
                       <div className='flex flex-row pt-2'>
                             <FaCircle className=' text-green-600 '/>
                               <text className='text-sm flex px-3'>
                                 <div className=''> Active Notes : {notesCount}</div>
                               </text>
-                          </div>
+                      </div>
+                  </div>
+
+                  )
+                }       
+                  </div>
+                </div>
+              
+            </Link>
+          </Card>
+
+          <Card className='border hover:border-blue-500  bg-no-repeat bg-cover bg-center'>
+            <CardHeader className='text-2xl'>Calendar</CardHeader>
+              <Link href="./Pages/Calendar" className='px-5 py-5 border-r-5'>
+                <div className='flex flex-col text-center'>
+                  <div className='flex flex-col text-center'>
+                    <text className='text-2xl flex flex-col justify-centre'>Summary</text>
+                    <Divider />
+                    {loading ? (
+                      <React.Fragment>
+                        <Spinner/> Loading...
+                      </React.Fragment>
+                
+                 ) : (
+                  <div className='flex flex-col text-center justify-center items-center'>
+                      <div className='flex flex-row pt-2'>
+                            <FaCircle className=' text-green-600 '/>
+                              <text className='text-sm flex px-3'>
+                                <div className=''> Active Events : {notesCount}</div>
+                              </text>
+                      </div>
+                      <div className='flex flex-row pt-2'>
+                            <FaCalendarDay className=' text-blue-600 '/>
+                              <text className='text-sm flex px-3'>
+                                <div className=''> Today : {notesCount}</div>
+                              </text>
+                      </div>
+                      <div className='flex flex-row pt-2'>
+                            <FaCalendarWeek className=' text-purple-600 '/>
+                              <text className='text-sm flex px-3'>
+                                <div className=''> This Month : {notesCount}</div>
+                              </text>
+                      </div>
                     </div>
                   )
                 }
@@ -138,30 +175,30 @@ export default function Index() {
             </Link>
           </Card>
 
-          <Card className='border hover:border-blue-500'>
-            <CardHeader>Todo List</CardHeader>
-              <Link href="/page1" className='px-5 border-r-5'>
-                <div className='grid grid-cols-2 gap-2'>
-                  <div className="card">
-                    <img src="https://picsum.photos/200" className='rounded border-r-10' alt="Image 1" />
-                  </div>
-                  <div>
-                    Summary:
-                  </div>
-                </div>
-              
-            </Link>
-          </Card>
-
-          <Card className='border hover:border-blue-500'>
-            <CardHeader>Todo List</CardHeader>
-              <Link href="/page1" className='px-5 border-r-5'>
-                <div className='grid grid-cols-2 gap-2'>
-                  <div className="card">
-                    <img src="https://picsum.photos/200" className='rounded border-r-10' alt="Image 1" />
-                  </div>
-                  <div>
-                    Summary:
+          <Card  className=' border hover:border-blue-500 bg-[url("./Assets/blackandred.jpg")] bg-no-repeat bg-cover bg-center' >
+            <CardHeader className='text-2xl'>Comming Soon...</CardHeader>
+              <Link href="./" className='px-5 py-5 border-r-5'>
+              <div className='flex flex-col text-center'>
+                <div className='flex flex-col text-center'>
+                    <text className='text-2xl flex flex-col justify-centre'>Summary</text>
+                    <Divider />
+                    {loading ? (
+                      <React.Fragment>
+                        <Spinner/> Loading...
+                      </React.Fragment>
+                
+                 ) : (
+                  <div className='flex flex-col text-center justify-center items-center'>
+                      <div className='flex flex-row pt-2'>
+                            <FaHeartBroken className=' text-red-600 '/>
+                              <text className='text-sm flex px-3'>
+                                <div className=''> Coming soon...</div>
+                              </text>
+                      </div>
+                    </div>
+                      
+                  )
+                }
                   </div>
                 </div>
               
