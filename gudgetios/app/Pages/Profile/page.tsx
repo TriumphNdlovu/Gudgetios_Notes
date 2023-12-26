@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 import {checkuser,signOut,EditProfile} from '../../components/checkuser'
-import { Avatar, Button, Card, CardFooter, Input } from '@nextui-org/react';
+import { Avatar, Button, Card, CardFooter, Input, Spinner } from '@nextui-org/react';
 import { getProfileService } from '@/app/services/ProfileService';
 
 const Profile = () => {
@@ -13,6 +13,7 @@ const Profile = () => {
     const [Username, setUsername] = useState('');
     const [Firstname, setFirstname] = useState('');
     const [Lastname, setLastname] = useState('');
+    const [loading, setLoading] = useState(true);
 
 
   async function Science() {
@@ -37,6 +38,8 @@ const Profile = () => {
           console.log('User is undefined');
         }
           
+      }).then(() => {
+        setLoading(false);
       });
 
     }catch(e)
@@ -55,7 +58,14 @@ const Profile = () => {
   return (
     <div className='h-screen flex flex-col items-center justify-center'>
       <Card className='border border-cyan-500 items-center w-1/2'>
-        <h1 className=' text-2xl'>Profile</h1>
+      {loading ? (
+        <div className="flex items-center justify-center">
+          <Spinner/> Loading...
+          </div>
+          ) : (
+            <>
+            
+            <h1 className=' text-2xl'>Profile</h1>
         <Card>
             <div className='flex items-center flex-col justify-between'>
                 <Avatar isBordered radius="full" src="https://i.pravatar.cc/150?u=a04258114e29026708c" 
@@ -74,6 +84,8 @@ const Profile = () => {
                     label="Lastname" disabled 
                     value={Lastname} className='py-1'/>
                 </div>
+                </>
+          )}
         <CardFooter>
             <div className='flex justify-right'>
                 <button className=' hover:bg-red-600  y-2 px-4 rounded' 
@@ -88,9 +100,9 @@ const Profile = () => {
                 </button>
             </div>
         </CardFooter>
-            
-      </Card>
-    </div>
+       
+        </Card>
+  </div>
   );
 };
 
