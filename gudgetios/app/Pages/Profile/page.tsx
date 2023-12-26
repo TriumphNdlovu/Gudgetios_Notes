@@ -56,7 +56,7 @@ const Profile = () => {
   }, [Science]);
 
   return (
-    <div className='h-screen flex flex-col items-center justify-center'>
+    <div className='flex flex-col items-center justify-center'>
       <Card className='border border-cyan-500 items-center w-1/2'>
       {loading ? (
         <div className="flex items-center justify-center">

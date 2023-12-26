@@ -5,7 +5,7 @@ import { FaArrowRight, FaGithubSquare, FaLinkedinIn, FaMailchimp } from 'react-i
 import { RxCross1 } from "react-icons/rx";
 import { Button, Card, CardBody, CardFooter, CardHeader, Divider, button } from '@nextui-org/react';
 import { MdOutlineArrowForwardIos } from "react-icons/md";
-import { RiTodoLine, RiStickyNoteLine, RiSettings3Line, RiCalendarLine, RiProfileFill, RiProfileLine, RiAccountBoxLine } from 'react-icons/ri';
+import { RiTodoLine, RiStickyNoteLine, RiSettings3Line, RiCalendarLine, RiProfileFill, RiProfileLine, RiAccountBoxLine, RiHome2Fill, RiHomeSmile2Fill } from 'react-icons/ri';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation'
 type LeftTabProps = {
@@ -61,8 +61,16 @@ const LeftTab: React.FC<LeftTabProps> = ({ setIsOpen }) => {
           <CardBody>
             <div className="flex flex-col items-start space-y-3">
 
+            <Link href="../">
+                <p className={`flex items-center text-lg hover:text-blue-900 ${usePathname() === '/' ? 'text-blue-900' : ''}`}>
+                  <RiHomeSmile2Fill className="mr-2" /> Home
+                </p>
+              </Link>
+
+            <Divider />
+
             <Link href="../Pages/Profile">
-                <p className={`flex items-center text-lg hover:text-orange-500 ${usePathname() === '/Pages/Profile' ? 'text-blue-500' : ''}`}>
+                <p className={`flex items-center text-lg hover:text-orange-500 ${usePathname() === '/Pages/Profile' ? 'text-orange-500' : ''}`}>
                   <RiAccountBoxLine className="mr-2" /> Profile
                 </p>
               </Link>

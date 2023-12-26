@@ -53,7 +53,7 @@ const Calendar: React.FC = () => {
   }
 
   return (
-    <div className='w-4/5 h-full'>
+    <div className='w-4/5 flex flex-col justify-between '>
       {loading && <div><Spinner/>Filling Calendar...</div>}
       <FullCalendar
         contentHeight='auto'
@@ -75,7 +75,7 @@ const Calendar: React.FC = () => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Your Task</ModalHeader>
+              <ModalHeader className="flex flex-col">Your Task</ModalHeader>
               <ModalBody>
                 <p>
                   {content}

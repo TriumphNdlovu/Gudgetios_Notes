@@ -87,7 +87,7 @@ export default function Notes() {
 
   return (
 
-    <div className=' w-ful text-xl'>
+    <div className=' w-full text-xl'>
       
       <div className='text-center text-2xl font-bold'>
         Notes
