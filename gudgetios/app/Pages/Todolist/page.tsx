@@ -108,7 +108,7 @@ export default function TodoList() {
     return (
       <div className="h-screen w-screen flex items-center justify-center">
         
-        <Spinner/>
+        <Spinner/> Loading...
         
       </div>
     

@@ -30,11 +30,11 @@ export default function Index() {
 
       getUpdateService().then((data) => {
         setNotesCount(data);
-      })
-
-    }).finally(() => {
+      }).finally(() => {
         setLoading(false);
       });
+
+    })
   }, []);
 
   
@@ -42,7 +42,7 @@ export default function Index() {
 
       <div className="h-screen w-screen flex items-center justify-center">
         
-        <Spinner/>
+        <Spinner/> Loading...
         
       </div>
 
@@ -52,7 +52,7 @@ export default function Index() {
     <div className="flex flex-col justify-between min-h-screen w-full ">
       <div className="flex flex-col w-full p-unit-xl">
         <div className="grid grid-cols-2 gap-4">
-          <Card className=' hover:border-blue-500'>
+          <Card  className=' border hover:border-blue-500'>
             <CardHeader className='text-2xl'>Todo List</CardHeader>
               <Link href="/page1" className='px-5 py-5 border-r-5'>
                 <div className='grid grid-cols-2 gap-2'>
@@ -64,7 +64,9 @@ export default function Index() {
                     <Divider />
                     {loading ? (
                         
-                          <Spinner/>
+                          <React.Fragment>
+                            <Spinner/> Loading...
+                          </React.Fragment>
                     
                     ) : (
                         <div>
@@ -102,7 +104,7 @@ export default function Index() {
             </Link>
           </Card>
 
-          <Card>
+          <Card className='border hover:border-blue-500'>
             <CardHeader className='text-2xl'>Notes</CardHeader>
               <Link href="/page1" className='px-5 py-5 border-r-5'>
                 <div className='grid grid-cols-2 gap-2'>
@@ -113,8 +115,9 @@ export default function Index() {
                     <text className='text-2xl flex flex-col justify-centre'>Summary</text>
                     <Divider />
                     {loading ? (
-                      
-                      <Spinner/>
+                      <React.Fragment>
+                        <Spinner/> Loading...
+                      </React.Fragment>
                 
                  ) : (
                     <div>
@@ -135,7 +138,7 @@ export default function Index() {
             </Link>
           </Card>
 
-          <Card>
+          <Card className='border hover:border-blue-500'>
             <CardHeader>Todo List</CardHeader>
               <Link href="/page1" className='px-5 border-r-5'>
                 <div className='grid grid-cols-2 gap-2'>
@@ -150,7 +153,7 @@ export default function Index() {
             </Link>
           </Card>
 
-          <Card>
+          <Card className='border hover:border-blue-500'>
             <CardHeader>Todo List</CardHeader>
               <Link href="/page1" className='px-5 border-r-5'>
                 <div className='grid grid-cols-2 gap-2'>
@@ -166,20 +169,6 @@ export default function Index() {
           </Card>
         </div>
       </div>
-
-      <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
-        <p>
-          Powered by{' '}
-          <a
-            href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-            target="_blank"
-            className="font-bold hover:underline"
-            rel="noreferrer"
-          >
-            Triumph Ndlovu @Gudgetios
-          </a>
-        </p>
-      </footer>
     </div>
   );
 }

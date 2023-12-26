@@ -2,7 +2,7 @@
 import { GeistSans } from 'geist/font/sans'
 import './globals.css'
 import { Providers } from './providers'
-import TopNavbar from './components/TopNavbar'
+import Myfooter from './components/myfooter'
 import MenuComponent from './components/MenuComponent'
 import LeftTab from './components/leftTab'
 import { useState } from 'react'
@@ -30,6 +30,7 @@ export default function RootLayout({
             {children}
           </Providers>
         </div>
+          <Myfooter/>
       </body>
     </html>
   )

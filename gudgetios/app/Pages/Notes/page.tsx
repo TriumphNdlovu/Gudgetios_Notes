@@ -13,7 +13,9 @@ import {
   useDisclosure,
   Button,
   Input,
-  Textarea
+  Textarea,
+  Spinner,
+  Divider
 
 } from '@nextui-org/react';
 import { FiEdit } from "react-icons/fi";
@@ -31,13 +33,16 @@ export default function Notes() {
   const onOpenEdit = () => setIsOpenEdit(true);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [loading, setLoading] = React.useState(true);
 
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   useEffect(() => {
     getNotesService().then((initialNotes) => {
       setNotes(initialNotes);
-    })
+    }).then(() => {
+      setLoading(false);
+    });
   }, [AddNoteComponent, updated]);
 
 
@@ -63,6 +68,21 @@ export default function Notes() {
     };
     const formattedDate = `${date.toLocaleDateString(undefined, options)}`;
     return formattedDate;
+    }
+
+    if (loading) {
+
+      return(
+
+      <div className="h-screen w-screen flex items-center justify-center">
+
+        <Spinner />
+        Loading...
+
+      </div>
+
+      );
+
     }
 
   return (
@@ -142,7 +162,9 @@ export default function Notes() {
                 <div className='text-xl text-foreground-800 py-2'>
                   {note.title}
                 </div>
-              
+                <div className='pb-5'>
+                  <Divider />
+                </div>
                 <p className=' font-thin'>{note.content}</p>
                 <CardFooter className='flex justify-end text-end text-xs text-gray-400' >
                   Created: {convertDate(note.created_at)}
@@ -161,22 +183,6 @@ export default function Notes() {
       <div className='flex justify-end'>
         <AddNoteComponent />
       </div>
-
-
-
-      <footer className="w-full border-t border-t-foreground/10 p-8 space-y-8 flex justify-center text-center text-xs">
-        <p>
-          Powered by{' '}
-          <a
-            href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-            target="_blank"
-            className="font-bold hover:underline"
-            rel="noreferrer"
-          >
-            Gudgetios
-          </a>
-        </p>
-      </footer>
     </div>
   )
 };
