@@ -23,7 +23,7 @@ export async function signOut() {
     await supabase.auth.signOut()
 
     console.log('Signed out');
-    return redirect('/login')
+    return redirect('../../Pages/login')
 }
 
 export async function EditProfile() {

@@ -20,7 +20,7 @@ const Profile = () => {
     
     checkuser().then((cake) => {
       if(cake == false)
-        router.push('/login');
+        router.push('../../Pages/login');
     });
 
     try

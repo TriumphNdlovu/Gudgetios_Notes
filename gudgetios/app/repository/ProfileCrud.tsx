@@ -24,3 +24,25 @@ export const getProfileDetails = async (): Promise<any> => {
   return data![0];
 }
 
+export const createProfile = async (profile: Profile): Promise<any> => {
+  const userId = (await getCurrentUserId()).toString();
+  const supabase = createClient(cookies());
+  const { data, error } = await supabase
+    .from('UserProfile')
+    .insert([
+      {
+        uniqueId: userId,
+        ...profile,
+      },
+    ]).select();
+
+  if (error) throw error
+  else console.log("Inseted successfully");
+
+  
+
+        
+
+  return data![0];
+}
+
