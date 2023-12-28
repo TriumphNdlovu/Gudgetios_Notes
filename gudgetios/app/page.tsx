@@ -9,18 +9,34 @@ import { getNotes } from './repository/NoteCrud';
 import { getNotesService, getUpdateService } from './services/NoteService';
 import { FaCalendarDay, FaCalendarMinus, FaCalendarWeek, FaCheck, FaCircle, FaClock, FaCross, FaHeartBroken } from 'react-icons/fa';
 import { Router } from 'next/router';
+import { redirect } from 'next/navigation'
+import { sessionDetection } from './services/sessionDetection';
+import { checkuser } from './components/checkuser';
+import { useRouter } from 'next/navigation'
+
+
 // import Header from './components/Header';
 
 export default function Index() {
-
+  
+  const router = useRouter();
   const [Active, setActive] = React.useState<number>(0);
   const [Completed, setCompleted] = React.useState<number>(0);
   const [Overdue, setOverdue] = React.useState<number>(0);
   const [Total, setTotal] = React.useState<number>(0);
   const [loading, setLoading] = React.useState(true);
   const [notesCount, setNotesCount] = React.useState(0);
+  
+
 
   React.useEffect(() => {
+
+
+    checkuser().then((logged) => {
+      if(logged == false)
+        router.push('./Pages/login');
+    });
+    
     getUpdatesService().then((data) => {
       setActive(data.Active);
       setCompleted(data.Completed);
@@ -38,6 +54,7 @@ export default function Index() {
     })
   }, []);
 
+    
   
     if(loading) {
 

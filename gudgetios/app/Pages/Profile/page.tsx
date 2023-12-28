@@ -18,8 +18,8 @@ const Profile = () => {
 
   async function Science() {
     
-    checkuser().then((cake) => {
-      if(cake == false)
+    checkuser().then((logged) => {
+      if(logged == false)
         router.push('../../Pages/login');
     });
 

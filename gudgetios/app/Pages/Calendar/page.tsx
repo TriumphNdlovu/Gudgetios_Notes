@@ -9,10 +9,14 @@ import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinn
 
 const Calendar: React.FC = () => {
 
-  const [events, setEvents] = React.useState<Todo[]>([]);
+  const [eventss, setEvents] = React.useState<Todo[]>([]);
+  const [events, setEventss] = React.useState([]);
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [content, setContent] = React.useState<string>("");
   const [loading, setLoading] = React.useState(true);
+  const [addedevent, OnAddevent] = React.useState(false);
+
+
   React.useEffect(() => {
     const getEvents = async () => {
       
@@ -52,24 +56,96 @@ const Calendar: React.FC = () => {
     onOpen();
   }
 
+  function handleDateSelect(info:any) {
+    const title = prompt('Please enter a new title for your event');
+    const newEvent = {
+      title,
+      start: info.startStr,
+      end: info.endStr,
+      allDay: info.allDay
+    };
+  
+    setEventss([...events, 
+                // Remove the unnecessary newEvent variable declaration
+                // newEvent,
+
+              ]);
+  }
+   
+
+  function handleEventAdd(info:any) {
+    alert("Start " + info.start + " End " + info.end);
+  }
+
   return (
     <div className='w-4/5 flex flex-col justify-between '>
       {loading && <div><Spinner/>Filling Calendar...</div>}
       <FullCalendar
         contentHeight='auto'
+
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         
         events={
-          events.filter(event => !event.completed).map(event => {
+          eventss.filter(event => !event.completed).map(event => {
             return {
               title: event.content,
-              date: event.due,
+              start: event.due,
+              end: event.due,
             }
           })
         }
+
+        eventDisplay='block'
+
         eventContent={renderEventContent}
-        eventClick={((data) => handleEventClick(data.event.title))} 
+        eventClick={((data) => handleEventClick(data.event.title))}
+        select={handleDateSelect}
+        selectable={true}
+        editable={true}
+        themeSystem='bootstrap5'
+        headerToolbar={{
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,dayGridWeek,dayGridDay'
+        }}
+
+        eventAdd={
+          ((data) => {
+            eventss.push({
+              content: data.event.title,
+              start: data.event.start!,
+              end: data.event.end!,
+              completed: false,
+              uniqueId: '',
+              due: data.event.end!,
+            });
+          })
+        }
+
+        eventRemove={
+          ((data) => {
+            eventss.forEach((event) => {
+              if (event.content == data.event.title) {
+                eventss.splice(eventss.indexOf(event), 1);
+              }
+            })
+          })
+        }
+
+        eventChange={
+          ((data) => {
+            eventss.forEach((event) => {
+              if (event.content == data.event.title) {
+                event.start = data.event.start!;
+                event.end = data.event.end!;
+              }
+            })
+          })
+        }
+
+
+
       />
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
