@@ -6,7 +6,7 @@ import { RxCross1 } from "react-icons/rx";
 import { Button, Card, CardBody, CardFooter, CardHeader, Divider, button } from '@nextui-org/react';
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { RiTodoLine, RiStickyNoteLine, RiSettings3Line, RiCalendarLine, RiProfileFill, RiProfileLine, RiAccountBoxLine, RiHome2Fill, RiHomeSmile2Fill } from 'react-icons/ri';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation'
 type LeftTabProps = {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -122,6 +122,7 @@ const LeftTab: React.FC<LeftTabProps> = ({ setIsOpen }) => {
 
 
           <CardFooter>
+
             <div className='flex flex-col'>
               <div className='flex justify-center text-centre'>
                 Contact us
@@ -131,23 +132,31 @@ const LeftTab: React.FC<LeftTabProps> = ({ setIsOpen }) => {
                 <Divider />
               </div>
 
-              <div >
-
-                <Link href={'https://github.com/TriumphNdlovu'}>
+              <div>
+                <button className='px-2' onClick={() => {
+                  window.open('https://github.com/TriumphNdlovu', '_blank');
+                }}>
                   <FaGithubSquare />
                   Github
-                </Link>
+                </button>
 
-                <button className='px-2 '>
-                  <FaLinkedinIn className='flex justify-center text-centre' />
+
+                <button className='px-2 ' onClick={() => {
+                  window.open('https://www.linkedin.com/in/triumph-ndlovu-425b73274/', '_blank');
+                }}>
+                  <FaLinkedinIn className='' />
                   Linkedin
                 </button >
-                <button className='px-2 '>
-                  <FaMailchimp className='flex justify-center text-centre' />
+
+                <button className='px-2 'onClick={() => {
+                  window.open('mailto:realtriumphndlovu@gmail.com', '_blank');
+                }}>
+                  <FaMailchimp className='' />
                   Gmail
                 </button>
               </div>
             </div>
+
           </CardFooter>
 
           {/* <AuthButton/> */}
