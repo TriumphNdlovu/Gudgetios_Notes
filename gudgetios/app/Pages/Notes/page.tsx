@@ -21,8 +21,9 @@ import {
 import { FiEdit } from "react-icons/fi";
 import React, { useEffect, useState } from 'react';
 import { getNotesService, deleteNoteService } from '@/app/services/NoteService';
-
+import { useRouter } from 'next/navigation';
 import { TfiClose } from "react-icons/tfi";
+import { checkuser } from '@/app/components/checkuser';
 
 export default function Notes() {
 
@@ -37,7 +38,13 @@ export default function Notes() {
 
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const router = useRouter();
+
   useEffect(() => {
+    checkuser().then((logged) => {
+      if (logged == false)
+        router.push('../../Pages/login');
+    });
     getNotesService().then((initialNotes) => {
       setNotes(initialNotes);
     }).then(() => {

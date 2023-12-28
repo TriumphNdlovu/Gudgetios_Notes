@@ -34,6 +34,8 @@ import {
 } from "../../services/TodoService";
 import { FaEdit, FaTrash, FaPlus, FaCheck } from "react-icons/fa";
 import MenuComponent from "@/app/components/MenuComponent";
+import { checkuser } from "@/app/components/checkuser";
+import { useRouter } from "next/navigation";
 
 export default function TodoList() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -45,8 +47,15 @@ export default function TodoList() {
   const [editDate, setEditDate] = useState('');
   const columns = ["Status", "Content", "Due", "Action"];
   const filtertitle = ["Active", "Completed", "Overdue"];
+  const router = useRouter();
 
   useEffect(() => {
+
+    checkuser().then((logged) => {
+      if(logged == false)
+        router.push('../../Pages/login');
+    });
+
     getTodosService()
       .then((initialTodos) => {
         const todosWithCorrectCompleted = initialTodos.map((todo) => ({

@@ -6,6 +6,8 @@ import React from 'react';
 import { Todo } from '@/app/interfaces/TodoList';
 import { getTodos } from '@/app/repository/TodoCrud';
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner, modal, popover, useDisclosure } from '@nextui-org/react';
+import { checkuser } from '@/app/components/checkuser';
+import { useRouter } from 'next/navigation';
 
 const Calendar: React.FC = () => {
 
@@ -15,11 +17,14 @@ const Calendar: React.FC = () => {
   const [content, setContent] = React.useState<string>("");
   const [loading, setLoading] = React.useState(true);
   const [addedevent, OnAddevent] = React.useState(false);
-
+  const router = useRouter();
 
   React.useEffect(() => {
+    checkuser().then((logged) => {
+      if (logged == false)
+        router.push('../../Pages/login');
+    });
     const getEvents = async () => {
-      
       getTodos().then((data) => {
         console.log(data);
         setEvents(data);
