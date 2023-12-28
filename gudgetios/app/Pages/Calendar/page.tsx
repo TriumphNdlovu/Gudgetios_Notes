@@ -37,9 +37,9 @@ const Calendar: React.FC = () => {
 
   function renderEventContent(eventInfo:any) {
     let title = eventInfo.event.title;
-    if (title.length > 20) {
-      title = title.substring(0, 20) + '...';
-    }
+    // if (title.length > 20) {
+    //   title = title.substring(0, 20) + '...';
+    // }
 
     return (
       <div>
@@ -104,6 +104,13 @@ const Calendar: React.FC = () => {
         eventDisplay='block'
 
         eventContent={renderEventContent}
+        dayCellClassNames={
+          'border-2 border-gray-200 rounded-md hover:border-gray-400 hover:bg-green-600'
+        }
+        eventClassNames={
+          'border-2 border-yellow-200 rounded-md hover:border-yellow-400 hover:bg-yellow-600 truncate'
+        }
+        
         eventClick={((data) => handleEventClick(data.event.title))}
         select={handleDateSelect}
         selectable={true}
