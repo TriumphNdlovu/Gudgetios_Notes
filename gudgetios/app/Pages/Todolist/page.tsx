@@ -1,8 +1,9 @@
 'use client'
-import { Card } from "@nextui-org/react";
+import { Button, Card, CardHeader } from "@nextui-org/react";
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import React, { useState } from 'react';
+import { FaCheck, FaChess } from "react-icons/fa";
 
 const ItemTypes = {
   CARD: 'card',
@@ -26,9 +27,18 @@ const CardItem = ({ id, content, index, moveCard }: { id: string, content: strin
 
   return (
     <div ref={(node) => ref(drop(node))}>
-      <Card>
-        {content}
-      </Card>
+      <div className="flex flex-row pt-1">
+          <Card className="bg-blue-400 h-10 w-full items-center">
+            <div >
+              {content}
+            </div>
+          </Card>
+          <div >
+            <Button >
+              <FaCheck/>
+            </Button>
+          </div>
+      </div>
     </div>
   );
 };
@@ -37,6 +47,7 @@ export default function TodoList() {
   const [tasks, setTasks] = useState([
     { id: 'task-1', content: 'Task 1' },
     { id: 'task-2', content: 'Task 2' },
+    { id: 'task-3', content: 'Task 3' },
   ]);
 
   const moveCard = (fromIndex:any, toIndex:any) => {
@@ -57,15 +68,21 @@ export default function TodoList() {
         <div>
           <div className="flex flex-row items-center h-[80vh]">
             <div className="px-1">
-              <Card className="items-center flex-grow min-w-[60vw] min-h-[60vh]">
-                
-                <DndProvider backend={HTML5Backend}>
-                  {tasks.map((task, index) => (
-                    <CardItem key={task.id} 
-                    id={task.id} content={task.content} 
-                    index={index} moveCard={moveCard} />
-                  ))}
-                </DndProvider>
+              <Card className="flex-grow min-w-[60vw] min-h-[60vh]">
+                <CardHeader>
+                  Tasks
+                </CardHeader>
+                <div>
+                  <DndProvider backend={HTML5Backend}>
+                    {tasks.map((task, index) => (
+                      <CardItem key={task.id} 
+                      id={task.id} content={task.content} 
+                      index={index} moveCard={moveCard} 
+                      />
+                      ))}
+                      
+                  </DndProvider>
+                </div>
 
               </Card>
             </div>
