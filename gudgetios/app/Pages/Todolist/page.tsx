@@ -1,287 +1,115 @@
-'use client';
-import {
-  CheckboxGroup,
-  Checkbox,
-  Button,
-  Input,
-  Divider,
-  Card,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-  getKeyValue,
-  Tabs,
-  Tab,
-  Select,
-  SelectItem,
-  Textarea,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Spinner,
-} from "@nextui-org/react";
-import React, { useState, useEffect } from "react";
-import { Todo } from "../../interfaces/TodoList";
-import {
-  getTodosService,
-  addTodoService,
-  removeTodoService,
-  toggleTodoService,
-  editTodoService,
-} from "../../services/TodoService";
-import { FaEdit, FaTrash, FaPlus, FaCheck } from "react-icons/fa";
-import MenuComponent from "@/app/components/MenuComponent";
-import { checkuser } from "@/app/components/checkuser";
-import { useRouter } from "next/navigation";
+'use client'
+import { Card } from "@nextui-org/react";
+import { DndProvider, useDrag, useDrop } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import React, { useState } from 'react';
+
+const ItemTypes = {
+  CARD: 'card',
+};
+
+const CardItem = ({ id, content, index, moveCard }: { id: string, content: string, index: number, moveCard: (fromIndex: number, toIndex: number) => void }) => {
+  const [, ref] = useDrag({
+    type: ItemTypes.CARD,
+    item: { id, index },
+  });
+
+  const [, drop] = useDrop({
+    accept: ItemTypes.CARD,
+    hover: (draggedItem:any) => {
+      if (draggedItem.index !== index) {
+        moveCard(draggedItem.index, index);
+        draggedItem.index = index;
+      }
+    },
+  });
+
+  return (
+    <div ref={(node) => ref(drop(node))}>
+      <Card>
+        {content}
+      </Card>
+    </div>
+  );
+};
 
 export default function TodoList() {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [newTodo, setNewTodo] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("Active");
-  const [editTodo, setEditTodo] = useState('');
-  const [editDate, setEditDate] = useState('');
-  const columns = ["Status", "Content", "Due", "Action"];
-  const filtertitle = ["Active", "Completed", "Overdue"];
-  const router = useRouter();
+  const [tasks, setTasks] = useState([
+    { id: 'task-1', content: 'Task 1' },
+    { id: 'task-2', content: 'Task 2' },
+  ]);
 
-  useEffect(() => {
-
-    checkuser().then((logged) => {
-      if(logged == false)
-        router.push('../../Pages/login');
-    });
-
-    getTodosService()
-      .then((initialTodos) => {
-        const todosWithCorrectCompleted = initialTodos.map((todo) => ({
-          ...todo,
-          completed: Boolean(todo.completed),
-        }));
-        setTodos(todosWithCorrectCompleted);
-      })
-      .finally(() => setLoading(false)); // Update loading state when done
-  }, []);
-
-  const handleAddTodo = () => {
-    addTodoService(newTodo, dueDate).then(() => {
-      getTodosService().then(setTodos);
-      setNewTodo("");
-      setDueDate("");
-    });
+  const moveCard = (fromIndex:any, toIndex:any) => {
+    const updatedTasks = [...tasks];
+    const [movedTask] = updatedTasks.splice(fromIndex, 1);
+    updatedTasks.splice(toIndex, 0, movedTask);
+    setTasks(updatedTasks);
   };
 
-
-  
-
-  const handleRemoveTodo = (uniqueId: string) => {
-    setLoading(true);
-    removeTodoService(uniqueId)
-      .then(() => getTodosService())
-      .then(setTodos)
-      .finally(() => setLoading(false));
-
-    if (loading) {
-      return <p className="w-full justify-centre">Loading...</p>;
-    }
-  };
-
-  const isOverdue = (dueDate: string) => {
-    const today = new Date();
-    const due = new Date(dueDate);
-    return due < today;
-  };
-
-  const handleToggleTodo = (completed: boolean, uniqueId: string) => {
-    toggleTodoService(!completed, uniqueId).then(() => {
-      getTodosService().then(setTodos);
-    });
-  };
-
-  const handleEditTodo = (id: string) => {
-    
-    editTodoService(editTodo, editDate, id).then(() => {
-      getTodosService().then(setTodos);
-    });
-  
-    setEditTodo('');
-    setEditDate('');
-  };
-
-  if (loading) {
-
-    return (
-      <div className="h-screen w-screen flex items-center justify-center">
-        
-        <Spinner/> Loading...
-        
-      </div>
-    
-    );
-  }
-
-  
   return (
-    <div>
-    <div className="flex flex-col items-center justify-center px-4 ">
-      
-      <div className="w-4/5">
+    <div className=" flex flex-col items-center">
+        <h1 className='text-2xl font-bold'>TodoList</h1>
 
-      <div className="flex">
-      <Textarea
-          label="Add Todo"
-          variant="bordered"
-          placeholder="enter todo here..."
-          disableAnimation
-          disableAutosize
-          value={newTodo}
-          onChange={(e) => setNewTodo(e.target.value)}
-          className="mb-2 w-full mr-2"
-          classNames={{
-            input: "resize-y min-h-[40px]",
-          }}
-        />
         <div>
-          <p>Choose due Date</p>
-          <Input
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-            className="mb-2 w-full min-h-fit-content"
-          />
+          <p>Add Button here</p>
         </div>
-        
-      </div>
 
-      <div className="flex">
-          <Button onClick={handleAddTodo} className="mb-2 flex-auto">
-            <FaPlus />
-          </Button>
-      </div>
-
-        
-
-        <Divider className="mb-2" />
-      <div className="w-full h-full">
-        <Table className="h-full w-full">
-          <TableHeader>
-            {columns.map((column, index) => (
-              <TableColumn key={index} className={`w-${index === 1 ? 3 : 1}/6`}>
-                <div>
-                  {column}
-                  {index === 1 && 
-                      <Select
-                      items={filtertitle}
-                      label="Filter"
-                      key= "Active"
-                      placeholder="Filter Tasks"
-                      style={{ width: "40%", marginLeft: "30%"}}
-                      onChange={(event) => setFilter(event.target.value)}
-                      >
-                      {filtertitle.map((item) => (
-                        <SelectItem key={item} value={item}>
-                          {item}
-                        </SelectItem>
-                      ))}
-                    </Select>
-                  }
-                </div>
+        <div>
+          <div className="flex flex-row items-center h-[80vh]">
+            <div className="px-1">
+              <Card className="items-center flex-grow min-w-[60vw] min-h-[60vh]">
                 
-              </TableColumn>
-            ))}
-          </TableHeader>
+                <DndProvider backend={HTML5Backend}>
+                  {tasks.map((task, index) => (
+                    <CardItem key={task.id} 
+                    id={task.id} content={task.content} 
+                    index={index} moveCard={moveCard} />
+                  ))}
+                </DndProvider>
 
-          <TableBody>
-            {todos
-              .filter((todo) => {
-                if (filter === "Active") return !todo.completed;
-                if (filter === "Completed") return todo.completed;
-                if (filter === "Overdue")
-                  return isOverdue(todo.due.toString()) && !todo.completed;
-                return true;
-              })
-              .map((row) => (
-                <TableRow
-                  key={row.uniqueId}
-                  style={{
-                    backgroundColor: row.completed ? "#427b3f" : "transparent",
-                  }}
-                >
-                  <TableCell
-                    key={0}
-                    className="flex justify-center items-center rounded-lg"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={row.completed}
-                      onChange={() => handleToggleTodo(row.completed, row.uniqueId)}
-                      className="w-4 h-4 sm:w-6 sm:h-6"
-                    />
-                  </TableCell>
-                  <TableCell
-                    key={1}
-                    style={{
-                      backgroundColor: row.completed
-                        ? "transparent"
-                        : "#0D1317",
-                      borderRadius: "10px",
-                    }}
-                  >
-                    {row.content}
-                  </TableCell>
-                  <TableCell key={2}>{row.due.toString()}</TableCell>
-                  <TableCell key={3}>
-                    <Button onClick={() => handleRemoveTodo(row.uniqueId)}>
-                      <FaTrash />
-                    </Button>
-                    <Popover placement="bottom" showArrow offset={10}>
-                    <PopoverTrigger>
-                        <Button 
-                          color="primary" 
-                          onClick={() => {
-                            setEditTodo(row.content);
-                            setEditDate(row.due.toString());
-                          }}
-                        >
-                          <FaEdit />
-                        </Button>
-                      </PopoverTrigger>
-                    <PopoverContent className="w-[240px]">
-                    {(titleProps) => (
-                      <div className="px-1 py-2 w-full">
-                        <p className="text-small font-bold text-foreground" {...titleProps}>
-                          Edit Todo
-                        </p>
-                        <div className="mt-2 flex flex-col gap-2 w-full">
-                          <Input
-                            value={editTodo}
-                            onChange={(e) => setEditTodo(e.target.value)}
-                            placeholder="Enter new todo here"
-                          />
-                          <Input
-                            type="date"
-                            value={editDate}
-                            onChange={(e) => setEditDate(e.target.value)}
-                          />
-                          <Button onClick={() => handleEditTodo(row.uniqueId)}>Save</Button>
-                        </div>
-                      </div>
-                    )}
-                  </PopoverContent>
-                  </Popover>
-  
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
+              </Card>
+            </div>
         </div>
       </div>
-    </div>
+
+      
     </div>
   );
 }
+
+
+
+
+{/* <div className=" flex flex-col items-center">
+        <h1 className='text-2xl font-bold'>TodoList</h1>
+
+        <div>
+          <p>Add Button here</p>
+        </div>
+        <div>
+          <div className="flex flex-row items-center h-[80vh]">
+
+            <div className="px-1">
+              <Card className="items-center flex-grow min-w-[20vw] min-h-[60vh]">
+                <p>Backlog</p>
+              </Card>
+            </div>
+
+              
+
+            <div className="px-1">
+              <Card className="items-center flex-grow min-w-[20vw] min-h-[60vh]">
+                <p>Inprogress</p>
+              </Card>
+            </div>
+
+              
+            <div className="px-1">
+              <Card className="items-center flex-grow min-w-[20vw] min-h-[60vh]">
+                <p className="items-center">Completed</p>
+              </Card>
+            </div>
+
+          </div>
+        </div>
+      </div> */}

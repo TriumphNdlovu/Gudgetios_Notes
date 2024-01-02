@@ -69,7 +69,7 @@ export default function Index() {
   return (
     <div className="flex flex-col justify-between w-full ">
       <div className="flex flex-col w-full p-unit-xl">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <Card  className=' border hover:border-blue-500  bg-no-repeat bg-cover bg-center' >
             <CardHeader className='text-2xl'>Todo List</CardHeader>
               <Link href="./Pages/Todolist" className='px-5 py-5 border-r-5 bg-opacity-90'>
