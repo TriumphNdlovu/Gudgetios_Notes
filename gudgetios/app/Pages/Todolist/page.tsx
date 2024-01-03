@@ -3,9 +3,10 @@ import { Button, Card, CardHeader } from "@nextui-org/react";
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import React, { use, useEffect, useState } from 'react';
-import { FaCheck, FaTrash } from "react-icons/fa";
+import { FaAlignJustify, FaCheck, FaCross, FaEraser, FaTimes, FaTrash, FaXRay } from "react-icons/fa";
 import { getTodos } from "@/app/repository/TodoCrud";
 import { Todo } from "@/app/interfaces/TodoList";
+import { toggleTodoService } from "@/app/services/TodoService";
 
 const ItemTypes = {
   CARD: 'card',
@@ -41,22 +42,15 @@ const CardItem = ({ id, content, completed, index, moveCard }: { id: string, con
             }
             
           }
-          className=" bg-transparent border border-cyan-600 h-10 w-full justify-start pl-5">
-            {content}
+          className=" bg-transparent border border-cyan-600 h-10 w-full justify-start pl-5 text-ellipsis"
+          >
+            <div className=" text-ellipsis">
+              {content}
+            </div>
+
           </Card>  
         <div>
-          <Button>
-          {
-            completed ?
-            (
-              <FaTrash/>
-            ) :
-            (
-              <FaCheck/>
-            )
-          }
-            
-          </Button>
+          
         </div>
       </div>
     </div>
@@ -80,6 +74,14 @@ export default function TodoList() {
     });
     
   }
+
+  const handleComplete = async (id: string, completed: boolean) => {
+    // console.log("The id is " + id);
+    // console.log("The completed is " + completed);
+    await toggleTodoService(!completed, id);
+    updatedTasks();
+  };
+
   useEffect(() => {
     updatedTasks();
   }
@@ -92,25 +94,45 @@ export default function TodoList() {
         <Button>Add Task</Button>
       </div>
       <div>
-        <div className="flex flex-row items-center h-[80vh]">
+        <div className="flex flex-row items-center h-[80vh] w-[75vw]">
           <div className="px-1">
-            <Card className="flex-grow min-w-[60vw] min-h-[60vh]">
+            <Card className=" flex-grow min-h-[60vh]">
               <CardHeader>
                 Tasks
               </CardHeader>
-              <div>
+              <div className=" overflow-auto scroll-smooth ">
                 <DndProvider backend={HTML5Backend}>
                   {tasks.map((task, index) => (
-                    
-                      <CardItem
-                        key={(task.id).toString()}
-                        id={task.uniqueId}
-                        content={task.content}
-                        completed={task.completed}
-                        index={index}
-                        moveCard={moveCard}
-                      />
-                  
+                    <div className="flex flex-row pt-1">
+                      <div className="flex-grow text-ellipsis">
+                        <CardItem
+                          key={(task.id).toString()}
+                          id={task.uniqueId}
+                          content={task.content}
+                          completed={task.completed}
+                          index={index}
+                          moveCard={moveCard}
+                        />
+                      </div>
+
+                      <Button
+                          onClick={() => {
+                            handleComplete(task.uniqueId, task.completed);
+                          }}
+                          >
+                          {
+                            task.completed ?
+                            (
+                              <FaTimes/>
+                            ) :
+                            (
+                              <FaCheck/>
+                            )
+                          }
+                            
+                          </Button>
+
+                    </div>
                   ))}
                 </DndProvider>
               </div>
