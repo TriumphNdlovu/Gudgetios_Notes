@@ -6,7 +6,7 @@ import React, { use, useEffect, useState } from 'react';
 import { FaAlignJustify, FaCheck, FaCross, FaEraser, FaPlusCircle, FaTimes, FaTrash, FaXRay } from "react-icons/fa";
 import { getTodos } from "@/app/repository/TodoCrud";
 import { Todo } from "@/app/interfaces/TodoList";
-import { removeTodoService, toggleTodoService } from "@/app/services/TodoService";
+import { addTodoService, removeTodoService, toggleTodoService } from "@/app/services/TodoService";
 
 const ItemTypes = {
   CARD: 'card',
@@ -72,7 +72,8 @@ export default function TodoList() {
   };
 
   const handleAddTask = () => {
-  // Add your task adding logic here
+  addTodoService(newTask, new Date().toISOString());
+  updatedTasks();
   setIsModalOpen(false);
 };
 
@@ -151,7 +152,10 @@ export default function TodoList() {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cancel
                 </Button>
-                <Button color="primary" onPress={onClose}>
+                <Button color="primary" onPress={() => {
+                  onClose();
+                  handleAddTask();
+                }}>
                   Add
                 </Button>
               </ModalFooter>
