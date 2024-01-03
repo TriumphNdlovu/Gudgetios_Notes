@@ -1,4 +1,5 @@
 export interface Todo {
+    id: number;
     uniqueId: string;
     content: string;
     due: Date;

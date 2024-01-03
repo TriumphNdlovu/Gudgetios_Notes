@@ -2,8 +2,10 @@
 import { Button, Card, CardHeader } from "@nextui-org/react";
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import React, { useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { FaCheck, FaTrash } from "react-icons/fa";
+import { getTodos } from "@/app/repository/TodoCrud";
+import { Todo } from "@/app/interfaces/TodoList";
 
 const ItemTypes = {
   CARD: 'card',
@@ -62,13 +64,7 @@ const CardItem = ({ id, content, completed, index, moveCard }: { id: string, con
 };
 
 export default function TodoList() {
-  const [tasks, setTasks] = useState([
-    { id: 'task-1', content: 'Task 1', Completed: false },
-    { id: 'task-2', content: 'Task 2', Completed: false },
-    { id: 'task-3', content: 'Task 3', Completed: true },
-    { id: 'task-4', content: 'Trinity', Completed: false },
-    { id: 'task-5', content: 'Trevor', Completed: true },
-  ]);
+  const [tasks, setTasks] = useState<Todo[]>([]);
 
 
   const moveCard = (fromIndex: any, toIndex: any) => {
@@ -78,6 +74,17 @@ export default function TodoList() {
     setTasks(updatedTasks);
   };
 
+  const updatedTasks = async () => {
+    getTodos().then((data) => {
+      setTasks(data);
+    });
+    
+  }
+  useEffect(() => {
+    updatedTasks();
+  }
+  , []);
+  
   return (
     <div className=" flex flex-col items-center">
       <h1 className='text-2xl font-bold'>TodoList</h1>
@@ -96,10 +103,10 @@ export default function TodoList() {
                   {tasks.map((task, index) => (
                     
                       <CardItem
-                        key={task.id}
-                        id={task.id}
+                        key={(task.id).toString()}
+                        id={task.uniqueId}
                         content={task.content}
-                        completed={task.Completed}
+                        completed={task.completed}
                         index={index}
                         moveCard={moveCard}
                       />

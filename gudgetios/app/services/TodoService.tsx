@@ -54,7 +54,7 @@ export const getUpdatesService = async (): Promise<UPDATES> => {
     Total++;
   });
 
-  console.log("The data"+Active, Completed, Overdue, Total);
+  console.log("The data " + Active, Completed, Overdue, Total);
 
   return {
     Active,
