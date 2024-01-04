@@ -5,18 +5,25 @@ import interactionPlugin from "@fullcalendar/interaction"
 import React from 'react';
 import { Todo } from '@/app/interfaces/TodoList';
 import { getTodos } from '@/app/repository/TodoCrud';
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner, modal, popover, useDisclosure } from '@nextui-org/react';
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner, popover, useDisclosure, Input, Textarea } from '@nextui-org/react';
 import { checkuser } from '@/app/components/checkuser';
 import { useRouter } from 'next/navigation';
+import { EVENT } from '@/app/interfaces/Events';
+import { addEvent } from '@/app/repository/EventCrud';
+import { addEventService, getEventsService } from '@/app/services/EventService';
+import { get } from 'http';
+import { title } from 'process';
 
 const Calendar: React.FC = () => {
 
   const [eventss, setEvents] = React.useState<Todo[]>([]);
-  const [events, setEventss] = React.useState([]);
+  const [realevents, setEvent] = React.useState<any[]>([]); // [1]
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const [isEventModalOpen, setIsEventModalOpen] = React.useState(false);
   const [content, setContent] = React.useState<string>("");
   const [loading, setLoading] = React.useState(true);
-  const [addedevent, OnAddevent] = React.useState(false);
+  const [newEvent, setNewEvent] = React.useState<EVENT>();
+  const [selectedEvent, setSelectedEvent] = React.useState<EVENT | null>(null);
   const router = useRouter();
 
   React.useEffect(() => {
@@ -25,61 +32,96 @@ const Calendar: React.FC = () => {
         router.push('../../Pages/login');
     });
     const getEvents = async () => {
+
       getTodos().then((data) => {
         console.log(data);
         setEvents(data);
+
+      })
+
+      getEventsService().then((data) => {
+        const mappedData = data.map((element) => ({
+          name: element.name,
+          startdate: element.startdate,
+          enddate: element.enddate,
+          description: element.description,
+          time: element.time,
+          id: element.id,
+          uniqueId: element.uniqueId,
+          completed: element.completed,
+        }));
+      
+        setEvent(mappedData);
       }).then(() => {
         setLoading(false);
       });
     }
+
     getEvents();
   }, []);
+  
 
-  function renderEventContent(eventInfo:any) {
-    let title = eventInfo.event.title;
-    // if (title.length > 20) {
-    //   title = title.substring(0, 20) + '...';
-    // }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+  
+    setNewEvent(prevEvent => ({
+      ...prevEvent!,
+      [name]: value,
+    }));
+  };
+  
 
-    return (
-      <div>
-        <b>{title}</b>
-      </div>
-      
-    );
-  }
-
-  onclose = () => {
-    console.log("it's closed");
-  }
   function onComplete() {
     console.log("it's completed");
   }
 
-  function handleEventClick(info:any) {
-    setContent(info);
-    onOpen();
+  function handleEventClick(info: any) {
+    console.log(info);
+    const clickedEvent = realevents.find((event) => event.name === info.event.title);
+  
+    if (clickedEvent) {
+      setSelectedEvent(clickedEvent);
+      onOpen();
+    }
   }
+  
+
+  const handleOpenEventModal = () => {
+    setIsEventModalOpen(true);
+  };
+  
+  const handleCloseEventModal = () => {
+    setIsEventModalOpen(false);
+  };
 
   function handleDateSelect(info:any) {
-    const title = prompt('Please enter a new title for your event');
-    const newEvent = {
-      title,
-      start: info.startStr,
-      end: info.endStr,
-      allDay: info.allDay
-    };
+    
+    setNewEvent({
+      name: info.title,
+      description: info.description,
+      startdate: info.startStr,
+      enddate: info.endStr,
+      completed: false,
+      id: info.id,
+      uniqueId: info.uniqueId,
+      time: info.time,
+    });
+    
+    setIsEventModalOpen(true);
+  };
   
-    setEventss([...events, 
-                // Remove the unnecessary newEvent variable declaration
-                // newEvent,
 
-              ]);
-  }
-   
+  function handleAddEvent() {
+    
+    alert
+    (
+        newEvent!.name + " " + newEvent!.description + " " 
+      + newEvent!.startdate + " " + newEvent!.enddate + " " 
+      + newEvent!.time + " " + newEvent!.completed
+    );
 
-  function handleEventAdd(info:any) {
-    alert("Start " + info.start + " End " + info.end);
+    addEventService(newEvent!);
+
   }
 
   return (
@@ -91,19 +133,19 @@ const Calendar: React.FC = () => {
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         
-        events={
-          eventss.filter(event => !event.completed).map(event => {
-            return {
-              title: event.content,
-              start: event.due,
-              end: event.due,
-            }
-          })
-        }
+        events={realevents.map(event => ({
+          title: event.name,
+          start: event.startdate,
+          end: event.enddate,
+          description: event.description,
+          time: event.time,
+          uniqueId: event.uniqueId,  
+        }))}
+        
 
         eventDisplay='block'
 
-        eventContent={renderEventContent}
+
         dayCellClassNames={
           'border-2 border-gray-200 rounded-md hover:border-gray-400 hover:bg-green-600'
         }
@@ -111,29 +153,25 @@ const Calendar: React.FC = () => {
           'border-2 border-yellow-200 rounded-md hover:border-yellow-400 hover:bg-yellow-600 truncate'
         }
         
-        eventClick={((data) => handleEventClick(data.event.title))}
-        select={handleDateSelect}
+        eventClick =
+        {
+          ((data) => handleEventClick(data.event.title))
+        }
+
+        
+        select={
+          handleDateSelect
+        }
+
         selectable={true}
         editable={true}
-        themeSystem='bootstrap5'
+        themeSystem='bootstrap'
         headerToolbar={{
           left: 'prev,next today',
           center: 'title',
           right: 'dayGridMonth,dayGridWeek,dayGridDay'
         }}
 
-        eventAdd={
-          ((data) => {
-            eventss.push({
-              content: data.event.title,
-              start: data.event.start!,
-              end: data.event.end!,
-              completed: false,
-              uniqueId: '',
-              due: data.event.end!,
-            });
-          })
-        }
 
         eventRemove={
           ((data) => {
@@ -159,21 +197,23 @@ const Calendar: React.FC = () => {
 
 
       />
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+
+<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col">Your Task</ModalHeader>
+              <ModalHeader className="flex flex-col">{selectedEvent?.name}</ModalHeader>
               <ModalBody>
-                <p>
-                  {content}
-                </p>
+                <p>{selectedEvent?.description}</p>
+                <p>Start Date: {(selectedEvent!.startdate).toString()}</p>
+                <p>End Date: {(selectedEvent!.enddate).toString()}</p>
+                <p>Time: {selectedEvent?.time}</p>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="success" onPress={onClose} onClick={()=>{onComplete()}}>
+                <Button color="success" onPress={onClose} onClick={() => onComplete()}>
                   Complete
                 </Button>
               </ModalFooter>
@@ -181,12 +221,75 @@ const Calendar: React.FC = () => {
           )}
         </ModalContent>
       </Modal>
+
+      <Modal isOpen={isEventModalOpen} onOpenChange={setIsEventModalOpen}>
+      <ModalContent>
+        {(onClose) => (
+          <>
+            <ModalHeader className="flex flex-col">Your Event</ModalHeader>
+            <ModalBody>
+              <div>
+              <Input
+                    name="name"
+                    label="Event title"
+                    value={newEvent!.name}
+                    onChange={handleInputChange}
+                    className='py-1'
+                  />
+                  <Textarea
+                    name="description"
+                    label="Description"
+                    value={newEvent!.description}
+                    onChange={handleInputChange}
+                    className='py-1'
+                  />
+                  <Input
+                    name="startdate"
+                    label="Start Date"
+                    type='Date'
+                    value={(newEvent!.startdate).toString()}
+                    onChange={handleInputChange}
+                    className='py-1'
+                  />
+                  <Input
+                    name="enddate"
+                    label="End Date"
+                    type='Date'
+                    value={(newEvent!.enddate).toString()}
+                    onChange={handleInputChange}
+                    className='py-1'
+                  />
+                  <Input
+                    name="time"
+                    label="Time"
+                    type='Time'
+                    value={newEvent!.time}
+                    onChange={handleInputChange}
+                    className='py-1'
+                  />
+                  <Button
+                    color="success"
+                    onPress={handleCloseEventModal}
+                    onClick={handleAddEvent}
+                  >
+                    Add Event
+                  </Button>
+              </div>
+              
+            </ModalBody>
+            <ModalFooter>
+              <Button color="danger" variant="light" onPress={onClose}>
+                Close
+              </Button>
+              
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
       
     </div>
   );
 };
-
-
-
 
 export default Calendar;

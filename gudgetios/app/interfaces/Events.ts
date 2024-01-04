@@ -1,11 +1,11 @@
 
-export interface Event {
+export interface EVENT {
     id: number;
     uniqueId: string;
     name: string;
     description: string;
     startdate: Date;
     enddate: Date;
-    time: Date;
+    time: string;
     completed: boolean;
 }

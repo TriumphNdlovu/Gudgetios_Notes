@@ -79,7 +79,7 @@ const LeftTab: React.FC<LeftTabProps> = ({ setIsOpen }) => {
 
               <Link href="../Pages/Todolist">
                 <p className={`flex items-center text-lg hover:text-blue-500 ${usePathname() === '/Pages/Todolist' ? 'text-blue-500' : ''}`}>
-                  <RiTodoLine className="mr-2" /> Todo List
+                  <RiTodoLine className="mr-2" /> Todos
                 </p>
               </Link>
 
