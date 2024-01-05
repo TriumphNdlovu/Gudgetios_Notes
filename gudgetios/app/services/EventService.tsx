@@ -1,6 +1,6 @@
 
 import { EVENT } from "../interfaces/Events";
-import { getEvents,addEvent } from "../repository/EventCrud";
+import { getEvents,addEvent, completeEvent } from "../repository/EventCrud";
 
 export const getEventsService = async (): Promise<EVENT[]> => {
     const data = await getEvents();
@@ -27,3 +27,7 @@ export const getEventsService = async (): Promise<EVENT[]> => {
 export const addEventService = async (newEvent: EVENT): Promise<void> => {
   addEvent(newEvent.title, newEvent.startdate, newEvent.enddate, newEvent.description, newEvent.time);
 };
+
+export const completeEventService = async (uniqueId: string): Promise<void> => {
+  return await completeEvent(uniqueId);
+}

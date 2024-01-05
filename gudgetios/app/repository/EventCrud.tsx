@@ -21,7 +21,8 @@ export const getEvents = async (): Promise<EVENT[]> => {
   const { data, error } = await supabase
     .from('Events')
     .select('*')
-    .eq('user_id', userId);
+    .eq('user_id', userId)
+    .eq('completed', false);
 
     console.log("Events " + data!.length);
 
@@ -43,5 +44,14 @@ export const addEvent = async (title: string, startdate: Date, enddate: Date, de
   if (error) throw error;
 };
 
+export const completeEvent = async (uniqueId: string): Promise<void> => {
+  const supabase = createClient(cookies());
+  const { error } = await supabase
+    .from('Events')
+    .update({ completed: true })
+    .match({ uniqueId });
+
+  if (error) throw error;
+};
 
 

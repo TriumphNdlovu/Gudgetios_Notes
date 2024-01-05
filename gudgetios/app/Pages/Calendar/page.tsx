@@ -10,7 +10,7 @@ import { checkuser } from '@/app/components/checkuser';
 import { useRouter } from 'next/navigation';
 import { EVENT } from '@/app/interfaces/Events';
 import { addEvent } from '@/app/repository/EventCrud';
-import { addEventService, getEventsService } from '@/app/services/EventService';
+import { addEventService, completeEventService, getEventsService } from '@/app/services/EventService';
 import { get } from 'http';
 import { title } from 'process';
 import { FaEdit, FaTrash } from 'react-icons/fa';
@@ -78,6 +78,7 @@ const Calendar: React.FC = () => {
         event.completed = true;
       }
     })
+    completeEventService(uniqueId);
   }
 
   function handleEventClick(info: any) {
