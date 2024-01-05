@@ -72,8 +72,12 @@ const Calendar: React.FC = () => {
   };
   
 
-  function onComplete() {
-    console.log("it's completed");
+  function onComplete(uniqueId: string) {
+    realevents.forEach((event) => {
+      if (event.uniqueId == uniqueId) {
+        event.completed = true;
+      }
+    })
   }
 
   function handleEventClick(info: any) {
@@ -208,36 +212,74 @@ const Calendar: React.FC = () => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-row items-center p-2">
-                
-                <div>
-                <FaTrash/>
+                <div className='p-2 r-50'>
+                <FaTrash 
+                className=' hover:text-red-500 cursor-pointer'
+                />
                 </div>
+              <ModalHeader className="flex flex-col items-center p-2">
+                
 
                 <div className='flex flex-row items-centre'>
-                 {selectedEvent?.title}
+                 Event
                 </div>
-
                 </ModalHeader>
               <ModalBody className="p-4 text-white">
-                <p className="mb-2">{selectedEvent?.description}</p>
-                <p className="mb-2">Start Date: {(selectedEvent!.startdate).toString()}</p>
-                <p className="mb-2">End Date: {(selectedEvent!.enddate).toString()}</p>
-                <p className="mb-2">Time: {selectedEvent?.time}</p>
+                <Input
+                  name="title"
+                  label="Title"
+                  value={selectedEvent?.title}
+                  onChange={handleInputChange}
+                  className='py-1'
+                  disabled
+                />
+                <Textarea
+                  name="Description"
+                  label="Description"
+                  value={selectedEvent?.description}
+                  onChange={handleInputChange}
+                  className='py-1'
+                  disabled
+                />
+                <Input
+                  name="startdate"
+                  label="Start Date"
+                  value={(selectedEvent!.startdate).toString()}
+                  onChange={handleInputChange}
+                  className='py-1'
+                  disabled
+                />
+                <Input
+                  name="enddate"
+                  label="End Date"
+                  value={(selectedEvent!.enddate).toString()}
+                  onChange={handleInputChange}
+                  className='py-1'
+                  disabled
+                />
+                <Input
+                  name="time"
+                  label="Time"
+                  value={selectedEvent?.time}
+                  onChange={handleInputChange}
+                  className='py-1'
+                  disabled
+                />
               </ModalBody>
               <ModalFooter className="flex justify-end p-2">
 
-                <Button className=" bg-red-500 text-white px-4 py-2 " onPress={onClose}>
-                  Close
-                </Button>
-                <Button className="bg-green-500 text-white px-4 py-2 " onPress={onClose} onClick={() => onComplete()}>
-                  Complete
-                </Button>
                 <Button className=" bg-blue-500 text-white px-4 py-2 " onPress={onClose}>
                   Edit
                   <FaEdit/>
-                  
                 </Button>
+                <Button className="bg-green-500 text-white px-4 py-2 " onPress={onClose} onClick={() => onComplete(selectedEvent!.uniqueId)}>
+                  Complete
+                </Button>
+                <Button className=" bg-red-500 text-white px-4 py-2 " onPress={onClose}>
+                  Close
+                </Button>
+                
+
               </ModalFooter>
             </>
           )}
