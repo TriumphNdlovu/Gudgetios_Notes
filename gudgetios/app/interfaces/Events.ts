@@ -2,7 +2,7 @@
 export interface EVENT {
     id: number;
     uniqueId: string;
-    name: string;
+    title: string;
     description: string;
     startdate: Date;
     enddate: Date;

@@ -28,8 +28,6 @@ export const getEvents = async (): Promise<EVENT[]> => {
   if (error) 
   throw error;
 
-
-
   return data || [];
 };
 

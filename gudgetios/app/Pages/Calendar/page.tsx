@@ -13,11 +13,12 @@ import { addEvent } from '@/app/repository/EventCrud';
 import { addEventService, getEventsService } from '@/app/services/EventService';
 import { get } from 'http';
 import { title } from 'process';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const Calendar: React.FC = () => {
 
   const [eventss, setEvents] = React.useState<Todo[]>([]);
-  const [realevents, setEvent] = React.useState<any[]>([]); // [1]
+  const [realevents, setEvent] = React.useState<EVENT[]>([]); // [1]
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [isEventModalOpen, setIsEventModalOpen] = React.useState(false);
   const [content, setContent] = React.useState<string>("");
@@ -41,7 +42,7 @@ const Calendar: React.FC = () => {
 
       getEventsService().then((data) => {
         const mappedData = data.map((element) => ({
-          name: element.name,
+          title: element.title,
           startdate: element.startdate,
           enddate: element.enddate,
           description: element.description,
@@ -77,7 +78,10 @@ const Calendar: React.FC = () => {
 
   function handleEventClick(info: any) {
     console.log(info);
-    const clickedEvent = realevents.find((event) => event.name === info.event.title);
+    const clickedEvent = realevents
+    .find(
+      (event) => event.title === info.event.title
+    );
   
     if (clickedEvent) {
       setSelectedEvent(clickedEvent);
@@ -97,7 +101,7 @@ const Calendar: React.FC = () => {
   function handleDateSelect(info:any) {
     
     setNewEvent({
-      name: info.title,
+      title: info.title,
       description: info.description,
       startdate: info.startStr,
       enddate: info.endStr,
@@ -115,7 +119,7 @@ const Calendar: React.FC = () => {
     
     alert
     (
-        newEvent!.name + " " + newEvent!.description + " " 
+        newEvent!.title + " " + newEvent!.description + " " 
       + newEvent!.startdate + " " + newEvent!.enddate + " " 
       + newEvent!.time + " " + newEvent!.completed
     );
@@ -134,12 +138,14 @@ const Calendar: React.FC = () => {
         initialView="dayGridMonth"
         
         events={realevents.map(event => ({
-          title: event.name,
+          title: event.title,
           start: event.startdate,
           end: event.enddate,
           description: event.description,
           time: event.time,
           uniqueId: event.uniqueId,  
+          id: event.id.toString(), // Convert the id to string
+          completed: event.completed
         }))}
         
 
@@ -155,7 +161,7 @@ const Calendar: React.FC = () => {
         
         eventClick =
         {
-          ((data) => handleEventClick(data.event.title))
+          ((data) => handleEventClick(data))
         }
 
         
@@ -165,7 +171,7 @@ const Calendar: React.FC = () => {
 
         selectable={true}
         editable={true}
-        themeSystem='bootstrap'
+        themeSystem='bootstrap5'
         headerToolbar={{
           left: 'prev,next today',
           center: 'title',
@@ -202,19 +208,35 @@ const Calendar: React.FC = () => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col">{selectedEvent?.name}</ModalHeader>
-              <ModalBody>
-                <p>{selectedEvent?.description}</p>
-                <p>Start Date: {(selectedEvent!.startdate).toString()}</p>
-                <p>End Date: {(selectedEvent!.enddate).toString()}</p>
-                <p>Time: {selectedEvent?.time}</p>
+              <ModalHeader className="flex flex-row items-center p-2">
+                
+                <div>
+                <FaTrash/>
+                </div>
+
+                <div className='flex flex-row items-centre'>
+                 {selectedEvent?.title}
+                </div>
+
+                </ModalHeader>
+              <ModalBody className="p-4 text-white">
+                <p className="mb-2">{selectedEvent?.description}</p>
+                <p className="mb-2">Start Date: {(selectedEvent!.startdate).toString()}</p>
+                <p className="mb-2">End Date: {(selectedEvent!.enddate).toString()}</p>
+                <p className="mb-2">Time: {selectedEvent?.time}</p>
               </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
+              <ModalFooter className="flex justify-end p-2">
+
+                <Button className=" bg-red-500 text-white px-4 py-2 " onPress={onClose}>
                   Close
                 </Button>
-                <Button color="success" onPress={onClose} onClick={() => onComplete()}>
+                <Button className="bg-green-500 text-white px-4 py-2 " onPress={onClose} onClick={() => onComplete()}>
                   Complete
+                </Button>
+                <Button className=" bg-blue-500 text-white px-4 py-2 " onPress={onClose}>
+                  Edit
+                  <FaEdit/>
+                  
                 </Button>
               </ModalFooter>
             </>
@@ -232,7 +254,7 @@ const Calendar: React.FC = () => {
               <Input
                     name="name"
                     label="Event title"
-                    value={newEvent!.name}
+                    value={newEvent!.title}
                     onChange={handleInputChange}
                     className='py-1'
                   />

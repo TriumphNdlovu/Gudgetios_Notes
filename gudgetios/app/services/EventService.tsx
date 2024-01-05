@@ -9,7 +9,7 @@ export const getEventsService = async (): Promise<EVENT[]> => {
   
     data.forEach(element => 
       EVENTS.push({
-        name: element.name,
+        title: element.title,
         startdate: element.startdate,
         enddate: element.enddate,
         description: element.description,
@@ -25,5 +25,5 @@ export const getEventsService = async (): Promise<EVENT[]> => {
 
 
 export const addEventService = async (newEvent: EVENT): Promise<void> => {
-  addEvent(newEvent.name, newEvent.startdate, newEvent.enddate, newEvent.description, newEvent.time);
+  addEvent(newEvent.title, newEvent.startdate, newEvent.enddate, newEvent.description, newEvent.time);
 };
