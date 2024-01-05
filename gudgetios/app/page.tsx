@@ -22,10 +22,13 @@ export default function Index() {
   const router = useRouter();
   const [Active, setActive] = React.useState<number>(0);
   const [Completed, setCompleted] = React.useState<number>(0);
+  const [ActiveEvents, setActiveEvents] = React.useState<number>(0);
+  const [TodayEvents, setTodayEvents] = React.useState<number>(0);
+  const [ThisMonthEvents, setThisMonthEvents] = React.useState<number>(0);
   const [Overdue, setOverdue] = React.useState<number>(0);
   const [Total, setTotal] = React.useState<number>(0);
-  const [loading, setLoading] = React.useState(true);
   const [notesCount, setNotesCount] = React.useState(0);
+  const [loading, setLoading] = React.useState(true);
   
 
 
@@ -42,6 +45,9 @@ export default function Index() {
       setCompleted(data.Completed);
       setOverdue(data.Overdue);
       setTotal(data.Total);
+      setActiveEvents(data.ActiveEvents);
+      setTodayEvents(data.TodayEvents);
+      setThisMonthEvents(data.ThisMonthEvents);
 
     }).then(() => {
 
@@ -71,7 +77,7 @@ export default function Index() {
       <div className="flex flex-col w-full p-unit-xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <Card  className=' border hover:border-blue-500  bg-no-repeat bg-cover bg-center' >
-            <CardHeader className='text-2xl'>Todo List</CardHeader>
+            <CardHeader className='text-2xl'>Todos</CardHeader>
               <Link href="./Pages/Todolist" className='px-5 py-5 border-r-5 bg-opacity-90'>
                 <div className='flex flex-col text-center'>
                     <div className=''>
@@ -166,19 +172,19 @@ export default function Index() {
                       <div className='flex flex-row pt-2'>
                             <FaCircle className=' text-green-600 '/>
                               <text className='text-sm flex px-3'>
-                                <div className=''> Active Events : {notesCount}</div>
+                                <div className=''> Active Events : {ActiveEvents}</div>
                               </text>
                       </div>
                       <div className='flex flex-row pt-2'>
                             <FaCalendarDay className=' text-blue-600 '/>
                               <text className='text-sm flex px-3'>
-                                <div className=''> Today : {notesCount}</div>
+                                <div className=''> Today : {TodayEvents}</div>
                               </text>
                       </div>
                       <div className='flex flex-row pt-2'>
                             <FaCalendarWeek className=' text-purple-600 '/>
                               <text className='text-sm flex px-3'>
-                                <div className=''> This Month : {notesCount}</div>
+                                <div className=''> This Month : {ThisMonthEvents}</div>
                               </text>
                       </div>
                     </div>

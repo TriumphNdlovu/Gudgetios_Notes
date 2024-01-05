@@ -8,6 +8,7 @@ import {
           toggleTodo
         } from '../repository/TodoCrud';
 import { data } from 'autoprefixer';
+import { getEvents } from '../repository/EventCrud';
 
 export const getTodosService = async (): Promise<Todo[]> => {
   return getTodos();
@@ -40,6 +41,9 @@ export const getUpdatesService = async (): Promise<UPDATES> => {
   let Completed = 0;
   let Overdue = 0;
   let Total = 0;
+  let ActiveEvents = 0;
+  let TodayEvents = 0;
+  let ThisMonthEvents = 0;
 
   data.forEach((todo) => {
     if (todo.completed === false) {
@@ -54,14 +58,34 @@ export const getUpdatesService = async (): Promise<UPDATES> => {
     Total++;
   });
 
-  console.log("The data " + Active, Completed, Overdue, Total);
+  const eventsdata = await getEvents();
+
+  eventsdata.forEach((event) => {
+
+    console.table(event);
+    if (event.completed === false) {
+      ActiveEvents++;
+    }
+    if (event.startdate >= new Date() && event.startdate <= new Date()) {
+      TodayEvents++;
+    }
+    if (event.enddate < new Date()) {
+      ThisMonthEvents++;
+    }
+  });
+
 
   return {
     Active,
     Completed,
     Overdue,
     Total,
+    ActiveEvents,
+    TodayEvents,
+    ThisMonthEvents,
   };
 }
+
+
 
 

@@ -9,7 +9,7 @@ import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinn
 import { checkuser } from '@/app/components/checkuser';
 import { useRouter } from 'next/navigation';
 import { EVENT } from '@/app/interfaces/Events';
-import { addEvent } from '@/app/repository/EventCrud';
+import { addEvent, getEvents } from '@/app/repository/EventCrud';
 import { addEventService, completeEventService, getEventsService } from '@/app/services/EventService';
 import { get } from 'http';
 import { title } from 'process';
@@ -17,14 +17,14 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const Calendar: React.FC = () => {
 
-  const [eventss, setEvents] = React.useState<Todo[]>([]);
+
   const [realevents, setEvent] = React.useState<EVENT[]>([]); // [1]
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [isEventModalOpen, setIsEventModalOpen] = React.useState(false);
   const [content, setContent] = React.useState<string>("");
   const [loading, setLoading] = React.useState(true);
   const [newEvent, setNewEvent] = React.useState<EVENT>();
-  const [selectedEvent, setSelectedEvent] = React.useState<EVENT | null>(null);
+  const [selectedEvent, setSelectedEvent] = React.useState<EVENT>();
   const router = useRouter();
 
   React.useEffect(() => {
@@ -32,14 +32,8 @@ const Calendar: React.FC = () => {
       if (logged == false)
         router.push('../../Pages/login');
     });
+
     const getEvents = async () => {
-
-      getTodos().then((data) => {
-        console.log(data);
-        setEvents(data);
-
-      })
-
       getEventsService().then((data) => {
         const mappedData = data.map((element) => ({
           title: element.title,
@@ -60,6 +54,12 @@ const Calendar: React.FC = () => {
 
     getEvents();
   }, []);
+
+  const updateRealevents = () => {
+    setEvent(realevents);
+    addEventService(newEvent!);
+    getEvents();
+  }
   
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -72,13 +72,17 @@ const Calendar: React.FC = () => {
   };
   
 
+
   function onComplete(uniqueId: string) {
     realevents.forEach((event) => {
       if (event.uniqueId == uniqueId) {
         event.completed = true;
       }
     })
-    completeEventService(uniqueId);
+    completeEventService(uniqueId).then(() => {
+      // call useEffect
+      setEvent([...realevents]);
+    })
   }
 
   function handleEventClick(info: any) {
@@ -129,6 +133,7 @@ const Calendar: React.FC = () => {
       + newEvent!.time + " " + newEvent!.completed
     );
 
+    setEvent(prevEvents => [...prevEvents, newEvent!]);
     addEventService(newEvent!);
 
   }
@@ -142,14 +147,14 @@ const Calendar: React.FC = () => {
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         
-        events={realevents.map(event => ({
+        events={realevents.filter(event => !event.completed).map(event => ({
           title: event.title,
           start: event.startdate,
           end: event.enddate,
           description: event.description,
           time: event.time,
           uniqueId: event.uniqueId,  
-          id: event.id.toString(), // Convert the id to string
+          id: event.id?.toString(),
           completed: event.completed
         }))}
         
@@ -186,9 +191,9 @@ const Calendar: React.FC = () => {
 
         eventRemove={
           ((data) => {
-            eventss.forEach((event) => {
-              if (event.content == data.event.title) {
-                eventss.splice(eventss.indexOf(event), 1);
+            realevents.forEach((event) => {
+              if (event.title == data.event.title) {
+                realevents.splice(realevents.indexOf(event), 1);
               }
             })
           })
@@ -196,10 +201,10 @@ const Calendar: React.FC = () => {
 
         eventChange={
           ((data) => {
-            eventss.forEach((event) => {
-              if (event.content == data.event.title) {
-                event.start = data.event.start!;
-                event.end = data.event.end!;
+            realevents.forEach((event) => {
+              if (event.title == data.event.title) {
+                event.startdate = data.event.start!;
+                event.enddate = data.event.end!;
               }
             })
           })
@@ -295,7 +300,7 @@ const Calendar: React.FC = () => {
             <ModalBody>
               <div>
               <Input
-                    name="name"
+                    name="title"
                     label="Event title"
                     value={newEvent!.title}
                     onChange={handleInputChange}

@@ -12,7 +12,10 @@ export const getCurrentUserId = async (): Promise<string> => {
 
 export const generateUniqueId = async() =>
 {
-  return Date.now().toString(36) + Math.random().toString(36).substring(2);
+
+  const uniqueId = Date.now().toString(36) + Math.random().toString(36).substring(2);
+
+  return uniqueId;
 }
 
 export const getEvents = async (): Promise<EVENT[]> => { 
@@ -21,8 +24,7 @@ export const getEvents = async (): Promise<EVENT[]> => {
   const { data, error } = await supabase
     .from('Events')
     .select('*')
-    .eq('user_id', userId)
-    .eq('completed', false);
+    .eq('user_id', userId);
 
     console.log("Events " + data!.length);
 
@@ -36,10 +38,10 @@ export const addEvent = async (title: string, startdate: Date, enddate: Date, de
 
   const user_id = (await getCurrentUserId()).toString();
   const supabase = createClient(cookies());
-  const uniqueId = generateUniqueId();
+  const uniqueId = await generateUniqueId();
   const { error } = await supabase
     .from('Events')
-    .insert([{ title, startdate, enddate, user_id, uniqueId, description, time }]);
+    .insert([{ title, startdate, enddate, user_id, uniqueId, description, time, completed: false }]);
 
   if (error) throw error;
 };

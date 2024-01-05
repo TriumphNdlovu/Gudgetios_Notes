@@ -13,4 +13,7 @@ export interface UPDATES {
     Completed  : number;
     Overdue    : number;
     Total      : number;
+    ActiveEvents: number;
+    TodayEvents : number;
+    ThisMonthEvents: number;
 }

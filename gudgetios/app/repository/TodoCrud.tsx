@@ -32,7 +32,7 @@ export const addTodo = async (content: string, due: String ): Promise<void> => {
 
   const user_id = (await getCurrentUserId()).toString();
   const supabase = createClient(cookies());
-  const uniqueId = generateUniqueId();
+  const uniqueId = await generateUniqueId();
   const { error } = await supabase
     .from('todos')
     .insert([{ content, completed: false, user_id, uniqueId,due }]);

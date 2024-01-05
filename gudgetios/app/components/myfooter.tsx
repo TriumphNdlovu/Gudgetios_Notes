@@ -14,7 +14,7 @@ export default function Myfooter() {
           className="font-bold hover:underline"
           rel="noreferrer"
         >
-          Triumph Ndlovu @Gudgetios
+          TriumphNdlovu@Gudgetios
         </a>
       </p>
     </footer>
