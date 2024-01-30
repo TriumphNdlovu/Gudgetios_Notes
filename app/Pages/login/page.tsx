@@ -3,8 +3,7 @@ import { headers, cookies } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { FaArrowLeft, FaBackward, FaEye, FaEyeSlash } from 'react-icons/fa'
-import { Input ,Image} from '@nextui-org/react'
-
+import { Input, Image } from '@nextui-org/react'
 
 export default function Login({
   searchParams,
@@ -18,9 +17,6 @@ export default function Login({
     const password = formData.get('password') as string
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
-   
-
-   
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -34,86 +30,69 @@ export default function Login({
     return redirect('/')
   }
 
-  const signUp = async (formData: FormData) => {
-    'use server'
-    return redirect('../../Pages/Register')
+  const signUp = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault(); // Prevent the default button click action
+    alert('Sign Up');
+    return redirect('../../Pages/Register');
   }
 
   return (
-    <div className='flex justify-center items-center h-full '>
-      <div className='flex flex-col'>
-      <div>
-        <Image
-          width={300}
-          height={200}
-          alt="NextUI hero Image with delay"
-          src="../../Assets/Back.jpg"
-        />
-      </div>
-    
-      <div className='w-full min-w-full'>
+    <div className="flex justify-center items-center h-full">
+      <div className="flex flex-col bg-blue-700 p-8 rounded-md shadow-md">
+        <div className="mb-8 text-center">
+        <div className='text-4xl font-black'>
+          Gudgetios.
+        </div>
+        <div className='text-2xl text-black'>
+          Welcome Back!
+          <br></br>
+          Enter Your credencial to continue.
+
+        </div>
+
+        </div>
+
         <form
-          className="animate-in flex flex-col w-full justify-center gap-3 text-foreground"
-          action={signIn} 
+          className="flex flex-col gap-4 text-foreground"
+          action={signIn}
         >
-    
-        {/* <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
-          name="email"
-          placeholder="Boldy@James.com"
-          required
-        /> */}
-        <Input
-          name="email"
-          isRequired
-          type="email"
-          label="Email"
-          variant="bordered"
-          placeholder="Enter your Email" 
-          labelPlacement="outside"
-        />
-        
-       
-        {/* <label className="text-md" htmlFor="password">
-          Password
-        </label> */}
-        {/* <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
-          type="password"
-          name="password"
-          placeholder="••••••••"
-          required
-        /> */}
+          <Input
+            name="email"
+            isRequired
+            type="email"
+            label="Email"
+            placeholder="Enter your Email"
+            labelPlacement="outside"
+          />
 
-        <Input
-              required
-              label="Password"
-              name="password"
-              variant="bordered"
-              placeholder="Enter your password"
-              type="password"
-              labelPlacement="outside"
-              
-            />
+          <Input
+            isRequired
+            label="Password"
+            name="password"
+            placeholder="•••••••••••"
+            type="password"
+            labelPlacement="outside"
+          />
 
-        <button className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2">
-          Sign In
-        </button>
-        <button
-          formAction={signUp}
-          className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
-        >
-          Sign Up
-        </button>
-        {searchParams?.message && (
-          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-            {searchParams.message}
-          </p>
-        )}
-      </form>
-    </div>
-    
-    </div>
+          <button className="bg-green-700 rounded-md px-4 py-2 text-white mb-2">
+            Sign In
+          </button>
+
+          <button
+            type="button"
+            onClick={signUp}
+            className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
+          >
+            Sign Up
+          </button>
+
+          {searchParams?.message && (
+            <p className="p-4 bg-foreground/10 text-foreground text-center">
+              {searchParams.message}
+            </p>
+          )}
+        </form>
+      </div>
     </div>
   )
 }
