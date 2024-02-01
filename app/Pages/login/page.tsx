@@ -30,9 +30,8 @@ export default function Login({
     return redirect('/')
   }
 
-  const signUp = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault(); // Prevent the default button click action
-    alert('Sign Up');
+  const signUp = async () =>{
+    "use server"
     return redirect('../../Pages/Register');
   }
 
@@ -54,7 +53,6 @@ export default function Login({
 
         <form
           className="flex flex-col gap-4 text-foreground"
-          action={signIn}
         >
           <Input
             name="email"
@@ -74,14 +72,15 @@ export default function Login({
             labelPlacement="outside"
           />
 
-          <button className="bg-green-700 rounded-md px-4 py-2 text-white mb-2">
+          <button className="bg-green-700 rounded-md px-4 py-2 text-white mb-2"
+          formAction={signIn}
+          >
             Sign In
           </button>
 
           <button
-            type="button"
-            onClick={signUp}
             className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
+            formAction={signUp}
           >
             Sign Up
           </button>

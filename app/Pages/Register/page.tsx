@@ -3,6 +3,7 @@ import { headers, cookies } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { createProfileService } from '@/app/services/ProfileService'
+import { Input } from '@nextui-org/react'
 
 
 export default function Register({
@@ -52,41 +53,33 @@ export default function Register({
   }
 
   return (
-    <div className='flex justify-center items-center h-screen'>
-    <div className="w-1/4">
-      <Link
-        href="/"
-        className=" py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
-        >
-          <polyline points="15 18 9 12 15 6" />
-        </svg>{' '}
-        Back
-      </Link>
-<div>
-  <div>
-    <p>
-      Welcome to Gudgetios ;|
-    </p>
-  </div>
-  </div>
-      <div>
+    <div className="flex justify-center items-center h-full">
+      <div className="flex flex-col bg-blue-700 p-8 rounded-md shadow-md">
+        <div className="mb-8 text-center">
+        <div className='text-4xl font-black'>
+          Gudgetios.
+        </div>
+          <div className='text-2xl text-black'>
+            Welcome!
+            <br></br>
+            Enter Your credencial to SignUp.
+          </div>
+        </div>
+
       <form
-        className="animate-in flex flex-col w-full justify-center gap-2 text-foreground"
-        action={signUp}
+        className="flex flex-col gap-4 text-foreground"
       >
-        <label className="text-md" htmlFor="text">
+
+            <Input
+            name="firstname"
+            isRequired
+            type="text"
+            label="firstname"
+            placeholder="Jane"
+            labelPlacement="outside"
+          />
+
+        {/* <label className="text-md" htmlFor="text">
           Firstname
         </label>
         <input
@@ -94,8 +87,9 @@ export default function Register({
           name="firstname"
           placeholder="Jane"
           required
-        />
-        <label className="text-md" htmlFor="text">
+        /> */}
+
+        {/* <label className="text-md" htmlFor="text">
           Lastname
         </label>
         <input
@@ -103,8 +97,18 @@ export default function Register({
           name="lastname"
           placeholder="Doey"
           required
-        />
-        <label className="text-md" htmlFor="email">
+        /> */}
+
+          <Input
+            name="lastname"
+            isRequired
+            type="text"
+            label="lastname"
+            placeholder="Doe"
+            labelPlacement="outside"
+          />
+
+        {/* <label className="text-md" htmlFor="email">
           Email
         </label>
         <input
@@ -112,8 +116,18 @@ export default function Register({
           name="email"
           placeholder="you@example.com"
           required
-        />
-        <label className="text-md" htmlFor="password">
+        /> */}
+
+          <Input
+            name="email"
+            isRequired
+            type="email"
+            label="email"
+            placeholder="JaneDoe@Gudgetios.com"
+            labelPlacement="outside"
+          />
+
+        {/* <label className="text-md" htmlFor="password">
           Password
         </label>
         <input
@@ -122,10 +136,20 @@ export default function Register({
           name="password"
           placeholder="••••••••"
           required
-        />
+        /> */}
+
+          <Input
+            name="password"
+            isRequired
+            type="password"
+            label="password"
+            placeholder="••••••••"
+            labelPlacement="outside"
+          />
 
         <button
           className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
+          formAction={signUp}
         >
           Sign Up
         </button>
@@ -142,7 +166,6 @@ export default function Register({
           </p>
         )}
       </form>
-    </div>
     </div>
     </div>
   )
