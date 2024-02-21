@@ -1,4 +1,4 @@
-import  {addNote, getNotes, deleteNote}  from "../repository/NoteCrud";
+import  {addNote, getNotes, deleteNote, updateNote}  from "../repository/NoteCrud";
 import { Note } from "../interfaces/Notes";
 
 export const addNoteService = async (theNote: Note): Promise<void> => {
@@ -10,6 +10,12 @@ export const addNoteService = async (theNote: Note): Promise<void> => {
 export const getNotesService = async (): Promise<Note[]> => {
     return await getNotes();
 };
+
+export const updateNoteService = async (theNote: Note, noteID: string): Promise<void> => 
+{
+    updateNote(theNote, noteID);
+}
+
 
 export const getUpdateService = async (): Promise<number> => {
     const data = await getNotes();

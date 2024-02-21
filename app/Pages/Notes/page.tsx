@@ -20,7 +20,7 @@ import {
 } from '@nextui-org/react';
 import { FiEdit } from "react-icons/fi";
 import React, { useEffect, useState } from 'react';
-import { getNotesService, deleteNoteService } from '@/app/services/NoteService';
+import { getNotesService, deleteNoteService, updateNoteService } from '@/app/services/NoteService';
 import { useRouter } from 'next/navigation';
 import { TfiClose } from "react-icons/tfi";
 import { checkuser } from '@/app/components/checkuser';
@@ -31,7 +31,13 @@ export default function Notes() {
   const [updated, setUpdated] = React.useState<boolean>(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   const onCloseEdit = () => setIsOpenEdit(false);
-  const onOpenEdit = () => setIsOpenEdit(true);
+  const onOpenEdit = (oldtitle: string, oldContent: string) => 
+  {
+    setIsOpenEdit(true)
+    setTitle(oldtitle);
+    setContent(oldContent);
+  
+  };
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = React.useState(true);
@@ -61,7 +67,16 @@ export default function Notes() {
   }
 
   function handleEdit(uniqueId: string): void {
-    throw new Error('Function not implemented.');
+    // setNotes(Notes.filter((note) => note.uniqueId !== uniqueId));
+    const id = 123;
+    const updatedNote =
+     {id,
+      title, content, 
+      created_at: (new Date()).toDateString(), 
+      uniqueId};
+    updateNoteService(updatedNote,uniqueId);
+    setUpdated
+    onCloseEdit();
   }
 
   function convertDate(Sdate: string): string {
@@ -105,7 +120,7 @@ export default function Notes() {
       <div className='flex flex-col items-center space-y-4'>
         {
           Notes.map((note) => (
-
+            
             <Card key={note.uniqueId} className='border hover:border-cyan-600 border-spacing-2 w-3/5 min-w-[20rem] justify-center relative'>
 
               <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -138,14 +153,14 @@ export default function Notes() {
                     <Input
                       autoFocus
                       label="Title"
-                      value={note.title}
+                      value={title}
                       onChange={(e) => setTitle(e.target.value)}
                       placeholder="Enter your title"
                       variant="bordered"
                     />
                     <Textarea
                       label="Content"
-                      value={note.content}
+                      value={content}
                       onChange={(e) => setContent(e.target.value)}
                       placeholder="Enter your content"
                       variant="bordered"
@@ -160,7 +175,9 @@ export default function Notes() {
                 </ModalContent>
               </Modal>
 
-
+              it config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+  
               <CardBody>
               
                 <button onClick={onOpen} className='text-white hover:text-red-800  absolute flex flex-col top-3 right-2 py-2'>
@@ -174,8 +191,8 @@ export default function Notes() {
                 </div>
                 <p className=' font-thin'>{note.content}</p>
                 <CardFooter className='flex justify-end text-end text-xs text-gray-400' >
-                  Created: {convertDate(note.created_at)}
-                  <button onClick={onOpenEdit} className='text-white hover:text-blue-500 padding px-1'>
+                  updated_at: {convertDate(note.created_at)}
+                  <button onClick={() => onOpenEdit(note.title, note.content)} className='text-white hover:text-blue-500 padding px-1'>
                     <FiEdit />
                   </button>
                 </CardFooter>

@@ -42,4 +42,14 @@ export const deleteNote = async (uniqueId: string): Promise<void> => {
     if (error) throw error;
   };
 
+  export const updateNote = async (theNote: Note, noteID: string): Promise<void> => {
+    const supabase = createClient(cookies());
+    const { error } = await supabase
+      .from('notes')
+      .update({ title: theNote.title, content: theNote.content, created_at: new Date()})
+      .eq('uniqueId', noteID);
+  
+    if (error) throw error;
+  }
+
 
