@@ -60,10 +60,18 @@ export default function Notes() {
 
 
   function handleDelete(uniqueId: string): void {
-    // setNotes(Notes.filter((note) => note.uniqueId !== uniqueId));
-    deleteNoteService(uniqueId);
-    setUpdated
-    onOpenChange();
+    deleteNoteService(uniqueId)
+    .then(() => {
+      // Remove the deleted note from the state
+      setNotes(prevNotes => prevNotes.filter(note => note.uniqueId !== uniqueId));
+    })
+    .catch(error => {
+      // Handle error
+      console.error("Error deleting note:", error);
+    });
+
+  // Close the deletion modal
+  onOpenChange();
   }
 
   function handleEdit(uniqueId: string): void {
@@ -74,9 +82,27 @@ export default function Notes() {
       title, content, 
       created_at: (new Date()).toDateString(), 
       uniqueId};
-    updateNoteService(updatedNote,uniqueId);
-    setUpdated
-    onCloseEdit();
+
+      updateNoteService(updatedNote, uniqueId).then(() => {
+        // Update the state with the edited note
+        setNotes(prevNotes => {
+          const updatedNotes = prevNotes.map(note => {
+            if (note.uniqueId === uniqueId) {
+              return { ...note, title, content };
+            }
+            return note;
+          });
+          return updatedNotes;
+        });
+    
+        onCloseEdit();
+      }).catch(error => {
+        // Handle error
+        console.error("Error updating note:", error);
+      });
+      
+    // setUpdated
+    // onCloseEdit();
   }
 
   function convertDate(Sdate: string): string {
@@ -175,9 +201,6 @@ export default function Notes() {
                 </ModalContent>
               </Modal>
 
-              it config --global user.email "you@example.com"
-  git config --global user.name "Your Name"
-  
               <CardBody>
               
                 <button onClick={onOpen} className='text-white hover:text-red-800  absolute flex flex-col top-3 right-2 py-2'>
