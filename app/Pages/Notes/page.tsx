@@ -24,6 +24,7 @@ import { getNotesService, deleteNoteService, updateNoteService } from '@/app/ser
 import { useRouter } from 'next/navigation';
 import { TfiClose } from "react-icons/tfi";
 import { checkuser } from '@/app/components/checkuser';
+import NoteCard from '@/app/components/NoteCard';
 
 export default function Notes() {
 
@@ -148,9 +149,7 @@ export default function Notes() {
       <div className='flex flex-col items-center space-y-4'>
         {
           Notes.map((note) => (
-            
-            <Card key={note.uniqueId} className='border hover:border-cyan-600 border-spacing-2 w-3/5 min-w-[20rem] justify-center relative'>
-
+   <>
               <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                   {(onClose) => (
@@ -202,42 +201,30 @@ export default function Notes() {
                   </ModalFooter>
                 </ModalContent>
               </Modal>
+      
+              {/* {
+          Notes.map((note) => ( */}
+          <Card  className='border hover:border-cyan-600 border-spacing-2 w-3/5 min-w-[20rem] justify-center relative'>
+            <CardBody>
+                <NoteCard note={note} handleDelete={handleDelete} handleEdit={handleEdit} convertDate={convertDate} onOpenEdit={onOpenEdit} onOpen={undefined} />
+            </CardBody>
+          </Card>
+          {/* ))
+              } */}
+          
+          
+      </> 
+      ))
+    }
 
-              <CardBody>
-              
-                <button onClick={onOpen} className='text-white hover:text-red-800  absolute flex flex-col top-3 right-2 py-2'>
-                  <TfiClose />
-                </button>
-                <div className='text-xl text-foreground-800 py-2'>
-                  {note.title}
-                </div>
-                <div className='pb-5'>
-                  <Divider />
-                </div>
-                <p className=' font-thin'>{note.content}</p>
-                <CardFooter className='flex justify-end text-end text-xs text-gray-400' >
-                  updated_at:
-                  {
-                    note.created_at === 'just now' ? 'just now' : convertDate(note.created_at)
-                  } 
-
-                  <button onClick={() => onOpenEdit(note.title, note.content)} className='text-white hover:text-blue-500 padding px-1'>
-                    <FiEdit />
-                  </button>
-                </CardFooter>
-              </CardBody>
-            </Card>
-          ))
-        }
-      </div>
-      <div>
-      </div>
-
-      <div className='flex justify-end'>
+    <div className='flex justify-end'>
         <AddNoteComponent addNote={addNote}/>
         {/* {Notes.map(note => <NoteComponent key={note.id} note={note} />)} */}
       </div>
+
+      </div>
     </div>
+
   )
 };
 
