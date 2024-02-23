@@ -5,7 +5,7 @@ import { Note } from '../interfaces/Notes';
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link, Textarea} from "@nextui-org/react";
 import { FaPlusCircle, FaTruckMonster } from 'react-icons/fa';
 
-export default function AddNoteComponent() {
+export default function AddNoteComponent({addNote}: {addNote: any}) {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -13,14 +13,15 @@ export default function AddNoteComponent() {
   function handleSubmit() {
 
     const note: Note = {
-      id : 0,
+      id : Date.now(),
       title,
       content,
       uniqueId : '',
-      created_at: '',
+      created_at: 'just now',
     };
 
     addNoteService(note);
+    addNote(note);
 
     setTitle('');
     setContent('');

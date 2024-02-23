@@ -41,7 +41,9 @@ export default function Notes() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = React.useState(true);
-
+  const addNote = (note:any) => {
+    setNotes(prevNotes => [...prevNotes, note]);
+  };
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const router = useRouter();
@@ -62,15 +64,15 @@ export default function Notes() {
   function handleDelete(uniqueId: string): void {
     deleteNoteService(uniqueId)
     .then(() => {
-      // Remove the deleted note from the state
+      
       setNotes(prevNotes => prevNotes.filter(note => note.uniqueId !== uniqueId));
     })
     .catch(error => {
-      // Handle error
+      
       console.error("Error deleting note:", error);
     });
 
-  // Close the deletion modal
+  
   onOpenChange();
   }
 
@@ -214,7 +216,11 @@ export default function Notes() {
                 </div>
                 <p className=' font-thin'>{note.content}</p>
                 <CardFooter className='flex justify-end text-end text-xs text-gray-400' >
-                  updated_at: {convertDate(note.created_at)}
+                  updated_at:
+                  {
+                    note.created_at === 'just now' ? 'just now' : convertDate(note.created_at)
+                  } 
+
                   <button onClick={() => onOpenEdit(note.title, note.content)} className='text-white hover:text-blue-500 padding px-1'>
                     <FiEdit />
                   </button>
@@ -228,7 +234,8 @@ export default function Notes() {
       </div>
 
       <div className='flex justify-end'>
-        <AddNoteComponent />
+        <AddNoteComponent addNote={addNote}/>
+        {/* {Notes.map(note => <NoteComponent key={note.id} note={note} />)} */}
       </div>
     </div>
   )
