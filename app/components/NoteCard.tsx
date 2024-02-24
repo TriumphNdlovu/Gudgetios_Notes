@@ -8,7 +8,8 @@ export default function NoteCard({note, onOpenDelete, onOpenEdit,
     , handleDelete: any, handleEdit: any ,isOpenDelete: any, onCloseDelete: any}) {
 
   return (
-        <div>
+        <div className=' w-full h-full text-xl'>
+          <div className='flex flex-col items-center space-y-4'>
           <Modal isOpen={isOpenDelete} onClose={onCloseDelete}>
                 <ModalContent>
                   {(onClose) => (
@@ -32,7 +33,7 @@ export default function NoteCard({note, onOpenDelete, onOpenEdit,
                 </ModalContent>
               </Modal>
 
-              <Card  className='border hover:border-cyan-600 border-spacing-2 w-3/5 min-w-[20rem] justify-center relative'>
+            <Card  className='border hover:border-cyan-600 border-spacing-2 w-3/5 min-w-[20rem] justify-center relative'>
             <CardBody>
             
               <button onClick={onOpenDelete} className='text-white hover:text-red-800  absolute flex flex-col top-3 right-2 py-2'>
@@ -58,6 +59,7 @@ export default function NoteCard({note, onOpenDelete, onOpenEdit,
                 </CardFooter>
                 </CardBody>
           </Card>
+        </div>
         </div>
 
     )
