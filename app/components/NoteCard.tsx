@@ -1,12 +1,41 @@
-import { CardFooter, Divider } from "@nextui-org/react";
+import { Button, Card, CardBody, CardFooter, Divider, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
 import { FiEdit } from "react-icons/fi";
 import { TfiClose } from "react-icons/tfi";
 
-export default function NoteCard({note, onOpen, onOpenEdit, convertDate,handleDelete,handleEdit}: {note: any, onOpen: any, onOpenEdit: any, convertDate: any , handleDelete: any, handleEdit: any}) {
-    return (
+export default function NoteCard({note, onOpenDelete, onOpenEdit, 
+  convertDate,handleDelete,handleEdit ,isOpenDelete, onCloseDelete}:
+   {note: any, onOpenDelete: any, onOpenEdit: any, convertDate: any 
+    , handleDelete: any, handleEdit: any ,isOpenDelete: any, onCloseDelete: any}) {
+
+  return (
         <div>
+          <Modal isOpen={isOpenDelete} onClose={onCloseDelete}>
+                <ModalContent>
+                  {(onClose) => (
+                    <>
+                      <ModalHeader className="flex flex-col gap-1">Delete Note</ModalHeader>
+                      <ModalBody>
+                        <p>
+                          Are you sure you want to delete this note?
+                        </p>
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button color="primary" variant="light" onPress={onClose}>
+                          Close
+                        </Button>
+                        <Button color="danger" onPress={() => { handleDelete(note.uniqueId) }}>
+                          Delete
+                        </Button>
+                      </ModalFooter>
+                    </>
+                  )}
+                </ModalContent>
+              </Modal>
+
+              <Card  className='border hover:border-cyan-600 border-spacing-2 w-3/5 min-w-[20rem] justify-center relative'>
+            <CardBody>
             
-              <button onClick={onOpen} className='text-white hover:text-red-800  absolute flex flex-col top-3 right-2 py-2'>
+              <button onClick={onOpenDelete} className='text-white hover:text-red-800  absolute flex flex-col top-3 right-2 py-2'>
                   <TfiClose />
               </button>
               
@@ -27,6 +56,8 @@ export default function NoteCard({note, onOpen, onOpenEdit, convertDate,handleDe
                     <FiEdit />
                   </button>
                 </CardFooter>
+                </CardBody>
+          </Card>
         </div>
 
     )

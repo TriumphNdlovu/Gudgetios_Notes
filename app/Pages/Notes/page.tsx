@@ -41,12 +41,21 @@ export default function Notes() {
   };
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [TuniqueId, setUniqueId] = useState('');
+
   const [loading, setLoading] = React.useState(true);
   const addNote = (note:any) => {
     setNotes(prevNotes => [...prevNotes, note]);
   };
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
+  const onCloseDelete = () => setIsOpenDelete(false);
+  const onOpenDelete = ( uniqueId:any) =>
+  {
+    setIsOpenDelete(true)
+    setUniqueId(uniqueId);
+  }
+
   const router = useRouter();
 
   useEffect(() => {
@@ -63,18 +72,15 @@ export default function Notes() {
 
 
   function handleDelete(uniqueId: string): void {
-    deleteNoteService(uniqueId)
+    deleteNoteService(TuniqueId)
     .then(() => {
-      
-      setNotes(prevNotes => prevNotes.filter(note => note.uniqueId !== uniqueId));
+      setNotes(Notes.filter((note) => note.uniqueId !== TuniqueId));
+      onCloseDelete
     })
     .catch(error => {
       
       console.error("Error deleting note:", error);
     });
-
-  
-  onOpenChange();
   }
 
   function handleEdit(uniqueId: string): void {
@@ -150,29 +156,7 @@ export default function Notes() {
         {
           Notes.map((note) => (
    <>
-              <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-                <ModalContent>
-                  {(onClose) => (
-                    <>
-                      <ModalHeader className="flex flex-col gap-1">Delete Note</ModalHeader>
-                      <ModalBody>
-                        <p>
-                          Are you sure you want to delete this note?
-                        </p>
-                      </ModalBody>
-                      <ModalFooter>
-                        <Button color="primary" variant="light" onPress={onClose}>
-                          Close
-                        </Button>
-                        <Button color="danger" onPress={() => { handleDelete(note.uniqueId) }}>
-                          Delete
-                        </Button>
-                      </ModalFooter>
-                    </>
-                  )}
-                </ModalContent>
-              </Modal>
-
+           
               <Modal isOpen={isOpenEdit} onClose={onCloseEdit}>
                 <ModalContent>
                   <ModalHeader>Edit Note</ModalHeader>
@@ -202,16 +186,14 @@ export default function Notes() {
                 </ModalContent>
               </Modal>
       
-              {/* {
-          Notes.map((note) => ( */}
-          <Card  className='border hover:border-cyan-600 border-spacing-2 w-3/5 min-w-[20rem] justify-center relative'>
-            <CardBody>
-                <NoteCard note={note} handleDelete={handleDelete} handleEdit={handleEdit} convertDate={convertDate} onOpenEdit={onOpenEdit} onOpen={undefined} />
-            </CardBody>
-          </Card>
-          {/* ))
-              } */}
+            
           
+                <NoteCard note={note} handleDelete={handleDelete} 
+                handleEdit={handleEdit} convertDate={convertDate} 
+                onOpenEdit={onOpenEdit} onOpenDelete={() => onOpenDelete(note.uniqueId)} 
+                isOpenDelete={isOpenDelete} onCloseDelete={onCloseDelete}
+                />
+           
           
       </> 
       ))
